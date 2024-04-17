@@ -1,33 +1,42 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Montserrat:wght@400;500;600;700;800&display=swap');
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    font-family: "Montserrat";
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.header-inner-div {
+    padding-bottom: 10rem !important;
+}
+
+
+#randomUserDisplaySection {
+    margin-top: -12rem;
+}
+
+.user-rounded-image {
+    border-radius: 100%;
+    margin-bottom: -4rem;
+    border: 4px solid gainsboro;
+}
+
+
+#displayUserInfo {
+    vertical-align: middle;
+
+}
+
+.fw-semibold{
+  margin-top: 22px !important;
+}
+
+.title-select-top{
+  float: left;
+  padding-left: 3px;
+}
+
+.sidenav-left{
+  padding: 10px;
+}
+
+.sidenav-left li a {
+  text-align: left;
 }
