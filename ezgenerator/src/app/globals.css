@@ -37,6 +37,13 @@ body {
   padding: 10px;
 }
 
-.sidenav-left li a {
+.sidenav-left li p {
   text-align: left;
+  margin-bottom: 0px !important;
+  margin-left: 10px;
+}
+
+.sidenav-left li p:hover{
+  cursor: pointer;
+  background-color: #c2d3ed;
 }

@@ -2,16 +2,163 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { format } from 'date-fns';
+export interface profile {
+  gender: string
+  name: Name
+  location: Location
+  email: string
+  login: Login
+  dob: Dob
+  registered: Registered
+  phone: string
+  cell: string
+  id: Id
+  picture: Picture
+  nat: string
+}
+
+export interface Name {
+  title: string
+  first: string
+  last: string
+}
+
+export interface Location {
+  street: Street
+  city: string
+  state: string
+  country: string
+  postcode: number
+  coordinates: Coordinates
+  timezone: Timezone
+}
+
+export interface Street {
+  number: number
+  name: string
+}
+
+export interface Coordinates {
+  latitude: string
+  longitude: string
+}
+
+export interface Timezone {
+  offset: string
+  description: string
+}
+
+export interface Login {
+  uuid: string
+  username: string
+  password: string
+  salt: string
+  md5: string
+  sha1: string
+  sha256: string
+}
+
+export interface Dob {
+  date: Date
+  age: number
+}
+
+export interface Registered {
+  date: string
+  age: number
+}
+
+export interface Id {
+  name: string
+  value: string
+}
+
+export interface Picture {
+  large: string
+  medium: string
+  thumbnail: string
+}
+
 export default function Home() {
   let data: any = null;
+  const [profile, setProfile] = useState<profile>();
+
+  // Create a class name of the left sidebar
+  const [classIG, setClassIG] = useState('nav-link active');
+  const [classRT, setClassRT] = useState('nav-link');
+  const [classFE, setClassFE] = useState('nav-link');
+  const [classFCCG, setClassFCCG] = useState('nav-link');
+  const [classFCCV, setClassFCCV] = useState('nav-link');
+  const [classFDL, setClassFDL] = useState('nav-link');
+  const [classFC, setClassFC] = useState('nav-link');
+  const [classFPN, setClassFPN] = useState('nav-link');
+  const [classFSSN, setClassFSSN] = useState('nav-link');
+
+  const [selectSideNavData, setSelectSideNavData] = useState('IG');
 
   async function generateKey() {
     const res = await fetch('http://localhost:3000/api/random-user/?nat=au&gender=male', {method: 'GET'});
     const dataFetch = await res.json();
     data = dataFetch.results[0];
+    setProfile(data);
     console.log(data, 'data');
   }
 
+  function onSelectSideNav(type: string) {
+    resetClassOfSideNav();
+    setSelectSideNavData(type);
+    switch(type) {
+      case 'IG': {
+        setClassIG('nav-link active');
+        break;
+      }
+      case 'RT': {
+        setClassRT('nav-link active');
+        break;
+      }
+      case 'FE': {
+        setClassFE('nav-link active');
+        break;
+      }
+      case 'FCCG': {
+        setClassFCCG('nav-link active');
+        break;
+      }
+      case 'FCCV': {
+        setClassFCCV('nav-link active');
+        break;
+      }
+      case 'FDL': {
+        setClassFDL('nav-link active');
+        break;
+      }
+      case 'FC': {
+        setClassFC('nav-link active');
+        break;
+      }
+      case 'FPN': {
+        setClassFPN('nav-link active');
+        break;
+      }
+      default: {
+        setClassFSSN('nav-link active');
+        break;
+      }
+    }
+  }
+
+  function resetClassOfSideNav() {
+    setClassIG('nav-link');
+    setClassRT('nav-link');
+    setClassFE('nav-link');
+    setClassFCCG('nav-link');
+    setClassFCCV('nav-link');
+    setClassFDL('nav-link');
+    setClassFC('nav-link');
+    setClassFPN('nav-link');
+    setClassFSSN('nav-link');
+  }
   return (
     <><header className="bg-dark text-white py-5">
       <div className="container">
@@ -180,7 +327,7 @@ export default function Home() {
                     </select>
                   </div>
                   <div className="col">
-                    <button type="button" onClick={generateKey} className="btn btn-success py-3 px-5 rounded-2 fw-semibold">Generate <FontAwesomeIcon icon={faDownload} /></button>
+                    <button type="button" onClick={() => generateKey} className="btn btn-success py-3 px-5 rounded-2 fw-semibold">Generate <FontAwesomeIcon icon={faDownload} /></button>
                   </div>
                 </div>
               </div>
@@ -194,70 +341,71 @@ export default function Home() {
                 <div className="card text-center shadow-lg">
                   <ul className="nav nav-pills flex-column mb-auto sidenav-left">
                     <li className="nav-item">
-                      <a href="#" className="nav-link active" aria-current="page">
+                      <p className={classIG} onClick={() => onSelectSideNav('IG')}>
                       Identity Generator
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classRT} onClick={() => onSelectSideNav('RT')}>
                       Random Text
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFE} onClick={() => onSelectSideNav('FE')}>
                       Fake Email
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFCCG} onClick={() => onSelectSideNav('FCCG')}>
                       Fake Credit Card Generator
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFCCV} onClick={() => onSelectSideNav('FCCV')}>
                       Fake Credit Card Validator
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFDL} onClick={() => onSelectSideNav('FDL')}>
                       Fake Driver's License
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFC} onClick={() => onSelectSideNav('FC')}>
                       Fake Company
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFPN} onClick={() => onSelectSideNav('FPN')}>
                       Fake Phone Number
-                      </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="#" className="nav-link link-dark">
+                      <p className={classFSSN} onClick={() => onSelectSideNav('FSSN')}>
                       Fake Social Security Number
-                      </a>
+                      </p>
                     </li>
                   </ul>
                 </div>
             </div>
             <div className="col-md-9" id="randomUserDisplaySection">
               <div className="card text-center shadow-lg">
-                <div className="card-header pt-5 shadow-sm"><img src="https://randomuser.me/api/portraits/med/men/69.jpg" className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div>
-                <div className="card-body mb-4 mt-5">
+                <div className="card-header pt-5 shadow-sm"><img src={profile?.picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div>
+                {selectSideNavData === 'IG' && (
+                  <div className="card-body mb-4 mt-5">
                   <h3 className="card-title pt-2 fs-2" id="displayUserName">Seline Giraud</h3>
                   <table className="table table-bordered mt-4">
                     <tbody className="text-start" id="displayUserInfo">
                       <tr>
-                        <td>Fake Name:</td>
+                        <td>Fake Name: {profile?.name.title} {profile?.name.first} {profile?.name.last}</td>
                         <td>Random Face:</td>
                       </tr>
                       <tr>
-                        <td>Latitude & longitude:</td>
+                        <td>Latitude & longitude: {profile?.location.coordinates.latitude}   ;   {profile?.location.coordinates.longitude}</td>
                         <td>Random Avatar:</td>
                       </tr>
                       <tr>
-                        <td>Phone:</td>
+                        <td>Phone: {profile?.phone}</td>
                         <td>QR Code:</td>
                       </tr>
                       <tr>
@@ -268,7 +416,7 @@ export default function Home() {
                   <table className="table table-bordered mt-4">
                     <tbody className="text-start" id="displayUserInfo">
                       <tr>
-                        <td>Date of Birth:</td>
+                        <td>Date of Birth: {profile?.dob.date ? format(profile?.dob.date, "MM-dd-yyyy") : ''}</td>
                         <td>Height:</td>
                         <td>Weight:</td>
                       </tr>
@@ -361,6 +509,130 @@ export default function Home() {
                     </tbody>
                   </table>
                 </div>
+                )}
+                
+                {selectSideNavData === 'RT' && (
+                  <div className="card-body mb-4 mt-5">
+                  <h3 className="card-title pt-2 fs-2" id="displayUserName">Random Text Generator</h3>
+                  <h3 className="card-title pt-2 fs-2" id="displayUserName">Generate Random Text, Lorem Iposm, or HTML</h3>
+                  <table className="table table-bordered mt-4">
+                    <tbody className="text-start" id="displayUserInfo">
+                      <tr>
+                        <td>
+                          <div className="col">
+                            <label className="form-label title-select-top">Language:</label>
+                            <select className="form-select" aria-label="Random">
+                              <option value="en_US">English</option>
+                              <option value="es_ES">Spanish</option>
+                              <option value="fr_FR">French</option>
+                              <option value="de_DE">German</option>
+                              <option value="zh_TW">Chinese</option>
+                              <option value="">---</option>
+                              <option value="ar_JO">Arabic</option>
+                              <option value="zh_TW">Chinese</option>
+                              <option value="cs_CZ">Czech</option>
+                              <option value="nl_NL">Dutch</option>
+                              <option value="en_US">English</option>
+                              <option value="fa_IR">Farsi</option>
+                              <option value="fr_FR">French</option>
+                              <option value="ka_GE">Georgian</option>
+                              <option value="de_DE">German</option>
+                              <option value="el_GR">Greek (Modern)</option>
+                              <option value="hu_HU">Hungarian</option>
+                              <option value="it_IT">Italian</option>
+                              <option value="ja_JP">Japanese</option>
+                              <option value="kk_KZ">Kazakh</option>
+                              <option value="ko_KR">Korean</option>
+                              <option value="pl_PL">Polish</option>
+                              <option value="ro_MD">Romanian</option>
+                              <option value="ru_RU">Russian</option>
+                              <option value="es_ES">Spanish</option>
+                              <option value="uk_UA">Ukrainian</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td>
+                        <div className="col">
+                            <label className="form-label title-select-top">Number of Paragraphs:</label>
+                            <select className="form-select" aria-label="Random">
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td><button type="submit" className="btn btn-primary w-100 mt-0">Generate Text</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                )}
+                
+                {selectSideNavData === 'FE' && (
+                  <div className="card-body mb-4 mt-5">
+                  <h3 className="card-title pt-2 fs-2" id="displayUserName">Create List of Fake Emails</h3>
+                  <h3 className="card-title pt-2 fs-2" id="displayUserName">Free Email List Generator</h3>
+                  <table className="table table-bordered mt-4">
+                    <tbody className="text-start" id="displayUserInfo">
+                      <tr>
+                        <td>
+                          <div className="col">
+                            <p>Simple Fake Email List Generator. Select how many email addresses you are looking for and click "generate".</p>
+                            <label className="form-label title-select-top">Number of Email to Generate</label>
+                            <input type="text" className="form-control"></input>
+                            <button type="submit" className="btn btn-primary w-100">Generate Emails</button>
+                          </div>
+                        </td>
+                        <td>
+                        <div className="col">
+                          <textarea className="form-control h-100">orunolfsdottir@gmail.com
+                            emerald69@harvey.info
+                            tate.schiller@gmail.com
+                            jolie.casper@yahoo.com
+                            stanley.tremblay@medhurst.com
+                            wayne96@hartmann.info
+                            pvonrueden@oberbrunner.com
+                            wheathcote@morissette.com
+                            baylee37@hotmail.com
+                            vincent.bernhard@bernhard.com
+                          </textarea>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                )}
+                
+                {selectSideNavData === 'FCCG' && (
+                  <div>
+                    <h1 className="heading"> Fake Credit Card Generator</h1>
+                    <p className="lead">
+                      Generating credit card numbers involve a mathematical formula known as the Luhn algorithm or the
+                      MOD 10 algorithm.
+                    </p>
+                    <p className="mb-3">
+                      To validate the generated fake credit cards, visit the fake credit card validator <a href="/tools/fake-credit-card-validator">here</a>.
+                      Visit our other tools like the <a href="/identity">identity generator</a> that creates fake identities.
+                    </p>
+                    <h3>What makes a Credit Card Number valid?</h3>
+                    <p className="mb-3">
+                      A valid credit card is composed of several parts.
+                      The first few digits of the credit card number (usually up to six digits) are known as the identification number (IIN) or the bank identification number (BIN).
+                      The next two parts are the individual account identification number and a single digit checksum in that order.
+                      The single digit checksum is used to validate the credit card number to prevent any errors and is also the resulting number when
+                      using the Luhn algorithm.
+                    </p>
+                    <h3>What are the Fake Credit Cards for?</h3>
+                    <p className="mb-5">
+                      Developers would use fake credit card generators to generate fake data to test their software or websites.
+                      One example that this tool would be useful for is testing the <a href="https://stripe.com/">stripe</a> API.
+                    </p>
+                  </div>
+                )}
+
               </div>
             </div>
           </div>
