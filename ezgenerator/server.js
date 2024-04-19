@@ -56,7 +56,7 @@ app.prepare().then(() => {
     try {
       const { locale, numParagraphs } = req.query;
       var text = generateRandomText(locale, numParagraphs);
-  
+      
       res.json({ text });
     } catch (error) {
       res.status(500).send('Error generating text');
