@@ -30,8 +30,8 @@ app.prepare().then(() => {
 
   server.get('/api/generate-card', async (req, res) => {
     try {
-      const { Type } = req.query;
-      var data = generateRandomCard(Type.toLowerCase());
+      const { type , nums } = req.query;
+      var data = generateRandomCard(type.toLowerCase(), nums);
 
       res.json(data);
     } catch (error) {
@@ -130,24 +130,25 @@ app.prepare().then(() => {
 
 const creditCardGenerator = require('creditcard-generator');
 
-function generateRandomCard(cardType) {
+function generateRandomCard(cardType, nums) {
+  const numsParse = parseInt(nums);
   const cardholderName = faker.name.findName();
   let generatedNumber, generatedCVV, expirationDate;
   switch (cardType.toLowerCase()) {
     case 'visa':
-      generatedNumber = creditCardGenerator.GenCC('VISA')[0];
+      generatedNumber = creditCardGenerator.GenCC('VISA', numsParse)[0];
       break;
     case 'mastercard':
-      generatedNumber = creditCardGenerator.GenCC('Mastercard')[0];
+      generatedNumber = creditCardGenerator.GenCC('Mastercard', numsParse)[0];
       break;
     case 'american express':
-      generatedNumber = creditCardGenerator.GenCC('American Express')[0];
+      generatedNumber = creditCardGenerator.GenCC('American Express', numsParse)[0];
       break;
     case 'discover':
-      generatedNumber = creditCardGenerator.GenCC('Discover')[0];
+      generatedNumber = creditCardGenerator.GenCC('Discover', numsParse)[0];
       break;
     case 'jcb':
-      generatedNumber = creditCardGenerator.GenCC('JCB')[0];
+      generatedNumber = creditCardGenerator.GenCC('JCB', numsParse)[0];
       break;
     default:
       throw new Error('Invalid card type');

@@ -45,5 +45,40 @@ body {
 
 .sidenav-left li p:hover{
   cursor: pointer;
-  background-color: #c2d3ed;
+  background-color: #c8bda2;
+}
+
+.bellowTitle{
+  color: #c37523 !important;
+  border-bottom: .1em solid #ad681f;
+}
+
+.bellowTitlev2{
+  border-bottom: .075em solid #ccc;
+}
+
+.lead {
+  font-weight: 500;
+  color: #5a5a5a;
+}
+.titleFCCG {
+  color: #c37523 !important;
+}
+
+.titleShowCompany{
+  border-bottom: .075em solid #ccc;
+}
+
+.nav-link.active {
+  background-color: #a28d76 !important;
+}
+.nav-link {
+  color: black !important;
+}
+.card-body{
+  min-height: 500px;
+}
+
+.border-bottom-title{
+  border-bottom: .1em solid #ad681f;
 }
