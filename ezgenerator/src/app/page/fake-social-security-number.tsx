@@ -14,7 +14,7 @@ const FakeSocialSecurityNumber: React.FC = () => {
     }
 
     async function generateSSN() {
-        const res = await fetch(`http://localhost:3000//api/ssn`, {method: 'GET'});
+        const res = await fetch(`https://ezgenerator.onrender.com//api/ssn`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataSSN(dataFetch.data);
     }

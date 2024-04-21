@@ -8,7 +8,7 @@ const FakeCreditCardValidator: React.FC = () => {
     }
 
     async function validateCard() {
-        const res = await fetch(`http://localhost:3000/api/validate-card/?cardNumber=${card}`, {method: 'GET'});
+        const res = await fetch(`https://ezgenerator.onrender.com/api/validate-card/?cardNumber=${card}`, {method: 'GET'});
         const dataFetch = await res.json();
     }
 

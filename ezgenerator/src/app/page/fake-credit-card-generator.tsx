@@ -13,7 +13,7 @@ const FakeCreditCardGenerator: React.FC = () => {
     }
 
     async function generateCCG() {
-        const res = await fetch(`http://localhost:3000/api/generate-card/?type=${cardType}&nums=${nums}`, {method: 'GET'});
+        const res = await fetch(`https://ezgenerator.onrender.com/api/generate-card/?type=${cardType}&nums=${nums}`, {method: 'GET'});
         const dataFetch = await res.json();
         setJsonCard(JSON.stringify(dataFetch, undefined, 4));
     }

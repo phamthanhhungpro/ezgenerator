@@ -25,7 +25,7 @@ const FakeCompany: React.FC = () => {
     }
 
     async function generateCompany() {
-        const res = await fetch(`http://localhost:3000/api/company?locale=${country}`, {method: 'GET'});
+        const res = await fetch(`https://ezgenerator.onrender.com/api/company?locale=${country}`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataCompany(dataFetch.data);
     }

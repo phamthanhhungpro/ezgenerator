@@ -24,7 +24,7 @@ const FakePhoneNumber: React.FC = () => {
     }
 
     async function generatePhoneNumbers() {
-        const res = await fetch(`http://localhost:3000/api/phone/?countryCode=${countryCode}&nums=${numsPhoneNumber}`, {method: 'GET'});
+        const res = await fetch(`https://ezgenerator.onrender.com/api/phone/?countryCode=${countryCode}&nums=${numsPhoneNumber}`, {method: 'GET'});
         const dataFetch = await res.json();
     }
 

@@ -118,13 +118,13 @@ export default function Home() {
   
 
   async function generateCompany() {
-    const res = await fetch(`http://localhost:3000/api/company?locale=au`, {method: 'GET'});
+    const res = await fetch(`https://ezgenerator.onrender.com/api/company?locale=au`, {method: 'GET'});
     const dataFetch = await res.json();
     setDataCompany(dataFetch.data);
   }
 
   async function generateCCG() {
-    const res = await fetch(`http://localhost:3000/api/generate-card/?type=visa&nums=1`, {method: 'GET'});
+    const res = await fetch(`https://ezgenerator.onrender.com/api/generate-card/?type=visa&nums=1`, {method: 'GET'});
     const dataFetch = await res.json();
     setDataCreditCard(dataFetch);
 }
@@ -132,7 +132,7 @@ export default function Home() {
   async function generateKey() {
     generateCCG();
     generateCompany();
-    const res = await fetch('http://localhost:3000/api/random-user/?gender=male&nat=au', {method: 'GET'});
+    const res = await fetch('https://ezgenerator.onrender.com/api/random-user/?gender=male&nat=au', {method: 'GET'});
     const dataFetch = await res.json();
     data = dataFetch.results[0];
     setProfile(data);
