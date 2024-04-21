@@ -30,6 +30,17 @@ const FakeCompany: React.FC = () => {
         setDataCompany(dataFetch.data);
     }
 
+    function exportToCSV() {
+        const csvContent = "data:text/csv;charset=utf-8," + 
+        dataCompany?.map(row => `${row.companyName},${row.industry},${row.website},${row.address},${row.zipCode}`).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link);
+        link.click();
+      };
+
     return (
         <div className='card-body mb-4 mt-3'>
             <h1 className="card-title fs-2 text-center"> Fake Company Name Generator:</h1>
@@ -120,7 +131,7 @@ const FakeCompany: React.FC = () => {
                     <th scope="col">Description</th>
                     <th scope="col">Website</th>
                     <th scope="col">Company Email</th>
-                    <th scope="col">EIN</th>
+                    <th scope="col">Phone Number</th>
                     </tr>
                 </thead>
                 <tbody className="text-start">
