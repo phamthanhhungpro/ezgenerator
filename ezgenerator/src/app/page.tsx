@@ -1,18 +1,24 @@
 'use client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { format } from 'date-fns';
 import RandomText from './page/random-text';
 import FakeMail from './page/fake-mail';
 import FakeCreditCardGenerator from "./page/fake-credit-card-generator";
 import FakeCreditCardValidator from "./page/fake-credit-card-validator";
 import FakeDriverLicense from "./page/fake-diver-license";
-import FakeCompany, { Company } from "./page/fake-company";
+import FakeCompany from "./page/fake-company";
 import FakePhoneNumber from "./page/fake-phone-number";
 import FakeSocialSecurityNumber from "./page/fake-social-security-number";
 
-export interface profile {
+export interface Profile {
+  results: Result[]
+  info: Info
+  moreData: MoreData
+}
+
+export interface Result {
   gender: string
   name: Name
   location: Location
@@ -69,7 +75,7 @@ export interface Login {
 }
 
 export interface Dob {
-  date: Date
+  date: string
   age: number
 }
 
@@ -89,17 +95,46 @@ export interface Picture {
   thumbnail: string
 }
 
-export interface CreditCard {
-  cardholderName: string
-  cardType: string
-  cardNumber: string
-  cvv: string
-  expirationDate: string
+export interface Info {
+  seed: string
+  results: number
+  page: number
+  version: string
 }
+
+export interface MoreData {
+  height: number
+  weight: number
+  bloodType: string
+  ethnicity: string
+  hairColor: string
+  bankName: string
+  bankNumber: string
+  routingNumber: string
+  iban: string
+  email: string
+  username: string
+  domainName: string
+  domainWord: string
+  urlWithQueryParams: string
+  ipAddress: string
+  ipv6Address: string
+  macAddress: string
+  websiteUrl: string
+  userAgent: string
+  degree: string
+  school: string
+  companyName: string
+  companyDescription: string
+  ein: number
+  jobTitle: string
+  salary: number
+}
+
 
 export default function Home() {
   let data: any = null;
-  const [profile, setProfile] = useState<profile>();
+  const [profile, setProfile] = useState<Profile>();
 
   // Create a class name of the left sidebar
   const [classIG, setClassIG] = useState('nav-link active');
@@ -112,35 +147,37 @@ export default function Home() {
   const [classFPN, setClassFPN] = useState('nav-link');
   const [classFSSN, setClassFSSN] = useState('nav-link');
 
+  const [gender, setGender] = useState('male');
+  const [age, setAge] = useState('');
+  const [country, setCountry] = useState('us');
+  const [state, setState] = useState('');
   const [selectSideNavData, setSelectSideNavData] = useState('IG');
-  const [dataCompany, setDataCompany] = useState<Company>();
-  const [dataCreditCard, setDataCreditCard] = useState<CreditCard>();
   
-
-  async function generateCompany() {
-    const res = await fetch(`http://localhost:3000/api/company?locale=au&nums=1`, {method: 'GET'});
-    const dataFetch = await res.json();
-    setDataCompany(dataFetch.data);
-  }
-
-  async function generateCCG() {
-    const res = await fetch(`http://localhost:3000/api/generate-card/?type=visa&nums=1`, {method: 'GET'});
-    const dataFetch = await res.json();
-    setDataCreditCard(dataFetch);
-}
-
+  useEffect(() => {
+    generateKey();
+  }, []);
+  
   async function generateKey() {
-    generateCCG();
-    generateCompany();
-    generateUser();
+    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}}&nat=${country}`, {method: 'GET'});
+    const dataFetch = await res.json();
+    setProfile(dataFetch);
   }
 
-  async function generateUser() {
-    const res = await fetch('http://localhost:3000/api/random-user/?gender=male&nat=au', {method: 'GET'});
-    const dataFetch = await res.json();
-    data = dataFetch.results[0];
-    setProfile(data);
-}
+  function changeGender(event: any) {
+    setGender(event.target.value);
+  }
+
+  function changeAge(event: any) {
+    setAge(event.target.value);
+  }
+
+  function changeCountry(event: any) {
+    setCountry(event.target.value);
+  }
+
+  function changeState(event: any) {
+    setState(event.target.value);
+  }
 
   function onSelectSideNav(type: string) {
     resetClassOfSideNav();
@@ -208,15 +245,14 @@ export default function Home() {
                 <div className="row">
                   <div className="col">
                     <label className="form-label title-select-top">Gender</label>
-                    <select className="form-select" aria-label="Random">
-                      <option value="1">Random</option>
-                      <option value="2">Male</option>
-                      <option value="3">Female</option>
+                    <select value={gender} onChange={changeGender} className="form-select" aria-label="Random">
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                   </div>
                   <div className="col">
                     <label className="form-label title-select-top">Age</label>
-                    <select className="form-select" aria-label="Random">
+                    <select value={age} onChange={changeAge} className="form-select" aria-label="Random">
                       <option value="1">Random</option>
                       <option value="2">18 to 24</option>
                       <option value="3">25 to 34</option>
@@ -228,7 +264,7 @@ export default function Home() {
                   </div>
                   <div className="col">
                     <label className="form-label title-select-top">Country</label>
-                    <select className="form-select" aria-label="Random">
+                    <select value={country} onChange={changeCountry} className="form-select" aria-label="Random">
                       <option value="en_US">United States</option>
                       <option value="uk">United Kingdom</option>
                       <option value="vi">Viet Nam</option>
@@ -266,7 +302,7 @@ export default function Home() {
                   </div>
                   <div className="col">
                     <label className="form-label title-select-top">State</label>
-                    <select className="form-select" aria-label="Random">
+                    <select value={state} onChange={changeState} className="form-select" aria-label="Random">
                       <option value="">Random</option>
                       <option value="alabama">Alabama</option>
                       <option value="alaska">Alaska</option>
@@ -386,20 +422,20 @@ export default function Home() {
             <div className="col-md-9" id="randomUserDisplaySection">
               <div className="card shadow-lg">
                 {selectSideNavData === 'IG' && (
-                  <><div className="card-header pt-5 shadow-sm text-center"><img src={profile?.picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div><div className="card-body mb-4 mt-5">
-                    <h3 className="card-title pt-2 fs-2 text-center" >{profile?.name.title} {profile?.name.first} {profile?.name.last}</h3>
+                  <><div className="card-header pt-5 shadow-sm text-center"><img src={profile?.results[0].picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div><div className="card-body mb-4 mt-5">
+                    <h3 className="card-title pt-2 fs-2 text-center" >{profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}</h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Fake Name: {profile?.name.title} {profile?.name.first} {profile?.name.last}</td>
+                          <td>Fake Name: {profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}</td>
                           <td>Random Face:</td>
                         </tr>
                         <tr>
-                          <td>Latitude & longitude: {profile?.location.coordinates.latitude}   ;   {profile?.location.coordinates.longitude}</td>
+                          <td>Latitude & longitude: {profile?.results[0].location.coordinates.latitude}   ;   {profile?.results[0].location.coordinates.longitude}</td>
                           <td>Random Avatar:</td>
                         </tr>
                         <tr>
-                          <td>Phone: {profile?.phone}</td>
+                          <td>Phone: {profile?.results[0].phone}</td>
                           <td>QR Code:</td>
                         </tr>
                         <tr>
@@ -410,18 +446,18 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Date of Birth: {profile?.dob.date ? format(profile?.dob.date, "MM-dd-yyyy") : ''}</td>
-                          <td>Height:</td>
-                          <td>Weight:</td>
+                          <td>Date of Birth: {profile?.results[0].dob.date ? format(profile?.results[0].dob.date, "MM-dd-yyyy") : ''}</td>
+                          <td>Height: {profile?.moreData.height}</td>
+                          <td>Weight: {profile?.moreData.weight}</td>
                         </tr>
                         <tr>
-                          <td>Gender:</td>
-                          <td>Hair Color:</td>
-                          <td>Eye Color:</td>
+                          <td>Gender: {profile?.results[0].gender}</td>
+                          <td>Hair Color: {profile?.moreData.hairColor}</td>
+                          <td>Eye Color: {profile?.moreData.ethnicity}</td>
                         </tr>
                         <tr>
-                          <td>Ethnicity:</td>
-                          <td>Blood Type:</td>
+                          <td>Ethnicity:{profile?.moreData.ethnicity}</td>
+                          <td>Blood Type: {profile?.moreData.weight}</td>
                           <td></td>
                         </tr>
                       </tbody>
@@ -430,20 +466,20 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Credit Card Number: {dataCreditCard?.cardNumber}</td>
-                          <td>Bank: {dataCreditCard?.cardType}</td>
+                          <td>Credit Card Number:</td>
+                          <td>Bank: {profile?.moreData.bankName}</td>
                         </tr>
                         <tr>
-                          <td>Exp Date: {dataCreditCard?.expirationDate}</td>
-                          <td>Bank Account Number:</td>
+                          <td>Exp Date:</td>
+                          <td>Bank Account Number: {profile?.moreData.bankNumber}</td>
                         </tr>
                         <tr>
-                          <td>CVV: {dataCreditCard?.cvv}</td>
-                          <td>Routing Number:</td>
+                          <td>CVV:</td>
+                          <td>Routing Number: {profile?.moreData.routingNumber}</td>
                         </tr>
                         <tr>
                           <td></td>
-                          <td>IBAN:</td>
+                          <td>IBAN: {profile?.moreData.iban}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -451,28 +487,28 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Username:</td>
-                          <td>IP Address (IPv4):</td>
+                          <td>Username: {profile?.moreData.username}</td>
+                          <td>IP Address (IPv4): {profile?.moreData.ipAddress}</td>
                         </tr>
                         <tr>
-                          <td>Password:</td>
-                          <td>IP Address (Local):</td>
+                          <td>Password: {profile?.results[0].login.password}</td>
+                          <td>IP Address (Local): {profile?.moreData.ipv6Address}</td>
                         </tr>
                         <tr>
-                          <td>Email Address:</td>
-                          <td>MAC Address:</td>
+                          <td>Email Address: {profile?.results[0].email}</td>
+                          <td>MAC Address: {profile?.moreData.macAddress}</td>
                         </tr>
                         <tr>
                           <td>Unique User Identifier (UUID):</td>
-                          <td>IP Address (IPv6):</td>
+                          <td>IP Address (IPv6):{profile?.moreData.ipv6Address}</td>
                         </tr>
                         <tr>
-                          <td>Website:</td>
+                          <td>Website: {profile?.moreData.websiteUrl}</td>
                           <td>Random Emoji:</td>
                         </tr>
                         <tr>
-                          <td>Color:</td>
-                          <td>User Agent:</td>
+                          <td>Color: {profile?.moreData.hairColor}</td>
+                          <td>User Agent: {profile?.moreData.userAgent}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -481,7 +517,7 @@ export default function Home() {
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
                           <td>Education Level:</td>
-                          <td>University:</td>
+                          <td>University: {profile?.moreData.school}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -489,16 +525,16 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Fake Company Name: {dataCompany?.companyName}</td>
-                          <td>Salary:</td>
+                          <td>Fake Company Name: {profile?.moreData.companyDescription}</td>
+                          <td>Salary: {profile?.moreData.salary}</td>
                         </tr>
                         <tr>
-                          <td>Company Description: {dataCompany?.industry}</td>
+                          <td>Company Description: {profile?.moreData.companyDescription}</td>
                           <td>Employee Title:</td>
                         </tr>
                         <tr>
-                          <td>Company EIN:</td>
-                          <td>Company Email:</td>
+                          <td>Company EIN: {profile?.moreData.ein}</td>
+                          <td>Company Email: {profile?.moreData.email}</td>
                         </tr>
                       </tbody>
                     </table>

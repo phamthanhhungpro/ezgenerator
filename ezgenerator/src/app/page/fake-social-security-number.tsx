@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const FakeSocialSecurityNumber: React.FC = () => {
     const [year, setYear] = useState('');
-    const [state, setState] = useState('');
+    const [state, setState] = useState('New york');
     const [dataSSN, setDataSSN] = useState<any>('');
+
+    useEffect(() => {
+        generateSSN();
+    }, []);
 
     function changeState(event: any) {
         setState(event.target.value);
@@ -24,9 +28,9 @@ const FakeSocialSecurityNumber: React.FC = () => {
             <h1 className="card-title fs-2 text-center border-bottom-title pb-2"> Social Security Number Generator</h1>
             <p className="lead">
                 Our Fake SSN Generator allows you to create a fake Social Security number that will
-                pass rudimentary social security number checkers such as
-                <a href="https://www.ssn-check.org" target="_blank">ssn-check.org</a> and
-                <a href="https://www.ssn-verify.com" target="_blank">ssn-verify.com</a>.
+                pass rudimentary social security number checkers such as 
+                <a href="https://www.ssn-check.org" target="_blank"> ssn-check.org </a> and
+                <a href="https://www.ssn-verify.com" target="_blank"> ssn-verify.com </a>.
             </p>
             <div className="card bg-light my-3">
                 <div className="card-body">

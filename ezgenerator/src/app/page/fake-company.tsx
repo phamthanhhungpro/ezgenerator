@@ -9,6 +9,7 @@ export interface Company {
     zipCode: string
     phoneNumber: string
     website: string
+    email: string
   }
 
 const FakeCompany: React.FC = () => {
@@ -32,7 +33,7 @@ const FakeCompany: React.FC = () => {
 
     function exportToCSV() {
         const csvContent = "data:text/csv;charset=utf-8," + 
-        dataCompany?.map(row => `${row.companyName},${row.industry},${row.website},${row.address},${row.zipCode}`).join("\n");
+        dataCompany?.map(row => `${row.companyName},${row.industry},${row.website},${row.email},${row.phoneNumber}`).join("\n");
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
@@ -141,7 +142,7 @@ const FakeCompany: React.FC = () => {
                         <td>{company.companyName}</td>
                         <td>{company.industry}</td>
                         <td>{company.website}</td>
-                        <td>{company.address}</td>
+                        <td>{company.email}</td>
                         <td>{company.phoneNumber}</td>
                     </tr>
                 ))}
