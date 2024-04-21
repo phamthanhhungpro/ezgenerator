@@ -110,7 +110,7 @@ app.prepare().then(() => {
   server.get('/api/ssn', async (req, res) => {
     try {
       const { state } = req.query;
-      var data = generateFakeSSN();
+      var data = generateFakeSSN(state);
   
       res.json({data});
     } catch (error) {
@@ -290,7 +290,7 @@ function generateFakePhoneNumbers(countryCode, nums) {
 }
 
 // SSN
-function generateFakeSSN() {
+function generateFakeSSN(state) {
   // Generate a random issue date within the last 10 years
   const issueDate = faker.date.past(10).toLocaleDateString('en-US');
 
@@ -299,5 +299,5 @@ function generateFakeSSN() {
               `${faker.random.number({ min: 10, max: 99 })}-` +
               `${faker.random.number({ min: 1000, max: 9999 })}`;
 
-  return { ssn, issueDate };
+  return { ssn, issueDate, state};
 }

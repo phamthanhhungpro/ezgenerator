@@ -118,7 +118,7 @@ export default function Home() {
   
 
   async function generateCompany() {
-    const res = await fetch(`http://localhost:3000/api/company?locale=au`, {method: 'GET'});
+    const res = await fetch(`http://localhost:3000/api/company?locale=au&nums=1`, {method: 'GET'});
     const dataFetch = await res.json();
     setDataCompany(dataFetch.data);
   }
@@ -132,12 +132,15 @@ export default function Home() {
   async function generateKey() {
     generateCCG();
     generateCompany();
+    generateUser();
+  }
+
+  async function generateUser() {
     const res = await fetch('http://localhost:3000/api/random-user/?gender=male&nat=au', {method: 'GET'});
     const dataFetch = await res.json();
     data = dataFetch.results[0];
     setProfile(data);
-    console.log(data, 'data');
-  }
+}
 
   function onSelectSideNav(type: string) {
     resetClassOfSideNav();
@@ -226,7 +229,7 @@ export default function Home() {
                   <div className="col">
                     <label className="form-label title-select-top">Country</label>
                     <select className="form-select" aria-label="Random">
-                      <option value="us">United States</option>
+                      <option value="en_US">United States</option>
                       <option value="uk">United Kingdom</option>
                       <option value="vi">Viet Nam</option>
                       <option value="fr">France</option>
@@ -257,7 +260,7 @@ export default function Home() {
                       <option value="en_ZA">South Africa</option>
                       <option value="ko">South Korea</option>
                       <option value="es">Spain</option>
-                      <option value="us">United States</option>
+                      <option value="en_US">United States</option>
                       <option value="vi">Viet Nam</option>
                     </select>
                   </div>

@@ -14,7 +14,7 @@ const FakeSocialSecurityNumber: React.FC = () => {
     }
 
     async function generateSSN() {
-        const res = await fetch(`http://localhost:3000//api/ssn`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000//api/ssn/?state=${state}`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataSSN(dataFetch.data);
     }
@@ -35,58 +35,58 @@ const FakeSocialSecurityNumber: React.FC = () => {
                         <div className="form-group">
                             <label>State</label>
                             <select value={state} onChange={changeState} className="form-control">
-                                <option value="">All state</option>
-                                <option value="alabama">Alabama</option>
-                                <option value="alaska">Alaska</option>
-                                <option value="arizona">Arizona</option>
-                                <option value="arkansas">Arkansas</option>
-                                <option value="california">California</option>
-                                <option value="colorado">Colorado</option>
-                                <option value="connecticut">Connecticut</option>
-                                <option value="delaware">Delaware</option>
-                                <option value="district of columbia">District Of Columbia</option>
-                                <option value="florida">Florida</option>
-                                <option value="georgia">Georgia</option>
-                                <option value="hawaii">Hawaii</option>
-                                <option value="idaho">Idaho</option>
-                                <option value="illinois">Illinois</option>
-                                <option value="indiana">Indiana</option>
-                                <option value="iowa">Iowa</option>
-                                <option value="kansas">Kansas</option>
-                                <option value="kentucky">Kentucky</option>
-                                <option value="louisiana">Louisiana</option>
-                                <option value="maine">Maine</option>
-                                <option value="maryland">Maryland</option>
-                                <option value="massachusetts">Massachusetts</option>
-                                <option value="michigan">Michigan</option>
-                                <option value="minnesota">Minnesota</option>
-                                <option value="mississippi">Mississippi</option>
-                                <option value="missouri">Missouri</option>
-                                <option value="montana">Montana</option>
-                                <option value="nebraska">Nebraska</option>
-                                <option value="nevada">Nevada</option>
-                                <option value="new hampshire">New Hampshire</option>
-                                <option value="new jersey">New Jersey</option>
-                                <option value="new mexico">New Mexico</option>
-                                <option value="new york">New York</option>
-                                <option value="north carolina">North Carolina</option>
-                                <option value="north dakota">North Dakota</option>
-                                <option value="ohio">Ohio</option>
-                                <option value="oklahoma">Oklahoma</option>
-                                <option value="oregon">Oregon</option>
-                                <option value="pennsylvania">Pennsylvania</option>
-                                <option value="rhode island">Rhode Island</option>
-                                <option value="south carolina">South Carolina</option>
-                                <option value="south dakota">South Dakota</option>
-                                <option value="tennessee">Tennessee</option>
-                                <option value="texas">Texas</option>
-                                <option value="utah">Utah</option>
-                                <option value="vermont">Vermont</option>
-                                <option value="virginia">Virginia</option>
-                                <option value="washington">Washington</option>
-                                <option value="west virginia">West Virginia</option>
-                                <option value="wisconsin">Wisconsin</option>
-                                <option value="wyoming">Wyoming</option>
+                                <option value="Alabama">All state</option>
+                                <option value="Alabama">Alabama</option>
+                                <option value="Alaska">Alaska</option>
+                                <option value="Arizona">Arizona</option>
+                                <option value="Arkansas">Arkansas</option>
+                                <option value="California">California</option>
+                                <option value="Colorado">Colorado</option>
+                                <option value="Connecticut">Connecticut</option>
+                                <option value="Delaware">Delaware</option>
+                                <option value="District of columbia">District Of Columbia</option>
+                                <option value="Florida">Florida</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Hawaii">Hawaii</option>
+                                <option value="Idaho">Idaho</option>
+                                <option value="Illinois">Illinois</option>
+                                <option value="Indiana">Indiana</option>
+                                <option value="Iowa">Iowa</option>
+                                <option value="Kansas">Kansas</option>
+                                <option value="Kentucky">Kentucky</option>
+                                <option value="Louisiana">Louisiana</option>
+                                <option value="Maine">Maine</option>
+                                <option value="Maryland">Maryland</option>
+                                <option value="Massachusetts">Massachusetts</option>
+                                <option value="Michigan">Michigan</option>
+                                <option value="Minnesota">Minnesota</option>
+                                <option value="Mississippi">Mississippi</option>
+                                <option value="Missouri">Missouri</option>
+                                <option value="Montana">Montana</option>
+                                <option value="Nebraska">Nebraska</option>
+                                <option value="Nevada">Nevada</option>
+                                <option value="New hampshire">New Hampshire</option>
+                                <option value="New jersey">New Jersey</option>
+                                <option value="New mexico">New Mexico</option>
+                                <option value="New york">New York</option>
+                                <option value="North carolina">North Carolina</option>
+                                <option value="North dakota">North Dakota</option>
+                                <option value="Ohio">Ohio</option>
+                                <option value="Oklahoma">Oklahoma</option>
+                                <option value="Oregon">Oregon</option>
+                                <option value="Pennsylvania">Pennsylvania</option>
+                                <option value="Rhode island">Rhode Island</option>
+                                <option value="South carolina">South Carolina</option>
+                                <option value="South dakota">South Dakota</option>
+                                <option value="Tennessee">Tennessee</option>
+                                <option value="Texas">Texas</option>
+                                <option value="Utah">Utah</option>
+                                <option value="Vermont">Vermont</option>
+                                <option value="Virginia">Virginia</option>
+                                <option value="Washington">Washington</option>
+                                <option value="West virginia">West Virginia</option>
+                                <option value="Wisconsin">Wisconsin</option>
+                                <option value="Wyoming">Wyoming</option>
                             </select>
                         </div>
                         <div className="form-group">
@@ -99,7 +99,7 @@ const FakeSocialSecurityNumber: React.FC = () => {
                     <div className="col-md-6 text-center">
                         <h3 className="mb-4">Results:</h3>
                         <p className="lead"><big><b>{dataSSN?.ssn}</b></big></p>
-                        <p><b>State:</b> Arizona </p>
+                        <p><b>State:</b> {dataSSN?.state} </p>
                         <p><b>Year:</b>
                             {dataSSN?.issueDate}
                         </p>

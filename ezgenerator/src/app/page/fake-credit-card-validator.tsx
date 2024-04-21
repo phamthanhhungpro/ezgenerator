@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
+export interface validateModel{
+    isValid: string;
+}
 
 const FakeCreditCardValidator: React.FC = () => {
     const [card, setCard] = useState('');
+    const [validateResult, setValidateResult] = useState<validateModel>();
 
     function changeCard(event: any) {
-        setCard(event.target.value);
+        const inputValue = event.target.value.replace(/\D/g, ""); // Lọc ra chỉ số
+        const formattedValue = inputValue.replace(/(\d{4})/g, "$1 "); // Thêm dấu cách sau mỗi nhóm 4 chữ số
+        setCard(formattedValue);
     }
 
     async function validateCard() {
-        const res = await fetch(`http://localhost:3000/api/validate-card/?cardNumber=${card}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000/api/validate-card/?cardNumber=${card.replaceAll(' ', '')}`, {method: 'GET'});
         const dataFetch = await res.json();
+        setValidateResult(dataFetch);
     }
 
     return (
@@ -28,14 +35,12 @@ const FakeCreditCardValidator: React.FC = () => {
                 <div className="col-md-6">
                     <div className="card">
                     <div className="card-body">
-                        <form>
-                            <input type="hidden" name="_token" value="CLcYhdcTavxNGJWii8V0D4BTsB1ACTUBps14Id5N"></input>
-                            <div className="form-group text-center mb-3">
-                                <label>Validate Credit Card Number</label>
-                                <input className="form-control form-control-lg" value={card} onChange={changeCard} type="text" placeholder="3458 8306 1287 283"></input>
-                            </div>
-                            <button className="btn btn-primary" onClick={validateCard} id="submit">Submit</button>
-                        </form>
+                    <input type="hidden" name="_token" value="CLcYhdcTavxNGJWii8V0D4BTsB1ACTUBps14Id5N"></input>
+                        <div className="form-group text-center mb-3">
+                            <label>Validate Credit Card Number</label>
+                            <input className="form-control form-control-lg" value={card} onChange={changeCard} type="text" placeholder="3458 8306 1287 283"></input>
+                        </div>
+                        <button className="btn btn-primary" onClick={validateCard} id="submit">Submit</button>
                     </div>
                     </div>
                 </div>

@@ -12,8 +12,8 @@ export interface Company {
   }
 
 const FakeCompany: React.FC = () => {
-    const [country, setCountry] = useState('us');
-    const [numsCompany, setNumsCompany] = useState('');
+    const [country, setCountry] = useState('en_US');
+    const [numsCompany, setNumsCompany] = useState(100);
     const [dataCompany, setDataCompany] = useState<Company[]>();
 
     function changeCountry(event: any) {
@@ -25,7 +25,7 @@ const FakeCompany: React.FC = () => {
     }
 
     async function generateCompany() {
-        const res = await fetch(`http://localhost:3000/api/company?locale=${country}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000/api/company?locale=${country}&nums=${numsCompany}`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataCompany(dataFetch.data);
     }
@@ -46,7 +46,7 @@ const FakeCompany: React.FC = () => {
                         <div className="form-group">
                             <label>Company Country:</label>
                             <select id="country" name="country" value={country} onChange={changeCountry} className="form-control">
-                                <option value="us">United States</option>
+                                <option value="en_US">United States</option>
                                 <option value="uk">United Kingdom</option>
                                 <option value="vi">Viet Nam</option>
                                 <option value="fr">France</option>
@@ -77,7 +77,7 @@ const FakeCompany: React.FC = () => {
                                 <option value="en_ZA">South Africa</option>
                                 <option value="ko">South Korea</option>
                                 <option value="es">Spain</option>
-                                <option value="us">United States</option>
+                                <option value="en_US">United States</option>
                                 <option value="vi">Viet Nam</option>
                             </select>
                             <small id="countryHelp" className="form-text text-muted">The country where the company is located.</small>

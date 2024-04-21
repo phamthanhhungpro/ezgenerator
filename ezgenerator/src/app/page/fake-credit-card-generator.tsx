@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+export interface CreditCardGeneratorModel {
+    cardholderName: string
+    cardType: string
+    cardNumber: string[]
+    cvv: string
+    expirationDate: string
+}
+
+  
 const FakeCreditCardGenerator: React.FC = () => {
     const [cardType, setCardType] = useState('visa');
-    const [nums, setNums] = useState(1);
+    const [nums, setNums] = useState(10);
     const [jsonCard, setJsonCard] = useState('');
+    const [dataTableCCG, setDataTableCCG] = useState<CreditCardGeneratorModel[]>([])
     function changeCardType(event: any) {
         setCardType(event.target.value);
     }
 
+    useEffect(() => {
+        generateCCG();
+      }, []);
+      
     function changeNums(event: any) {
         setNums(event.target.value);
     }
@@ -15,8 +29,20 @@ const FakeCreditCardGenerator: React.FC = () => {
     async function generateCCG() {
         const res = await fetch(`http://localhost:3000/api/generate-card/?type=${cardType}&nums=${nums}`, {method: 'GET'});
         const dataFetch = await res.json();
+        setDataTableCCG(dataFetch);
         setJsonCard(JSON.stringify(dataFetch, undefined, 4));
     }
+
+    function exportToCSV() {
+        const csvContent = "data:text/csv;charset=utf-8," + 
+        dataTableCCG.map(row => `${row.cardholderName},${row.cardNumber},${row.expirationDate},${row.cvv},${row.cardType}`).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link);
+        link.click();
+      };
 
     return (
         <div className="card-body mb-4 mt-3">
@@ -65,10 +91,34 @@ const FakeCreditCardGenerator: React.FC = () => {
             <div className="tab-content " id="nav-tabContent">
                 <div className="tab-pane fade show active" id="nav-json" role="tabpanel" aria-labelledby="nav-home-tab">
                     <p>
-                        <textarea className="form-control h-100" value={jsonCard}></textarea>
+                        <textarea className="form-control textareaFCCG" value={jsonCard}></textarea>
                     </p>
                 </div>
-                <div className="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+                <div className="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <button type="button" className="btn btn-success btn-sm mt-3 mb-3" onClick={exportToCSV}>Export Table To CSV File </button>
+                    <table className="table table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th scope="col">Credit Card Name</th>
+                                <th scope="col">Credit Card Number</th>
+                                <th scope="col">Expiration</th>
+                                <th scope="col">CVVS</th>
+                                <th scope="col">Card Type</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-start" id="displayUserInfo">
+                        {dataTableCCG.map((dataCCG) => (
+                            <tr>
+                                <td>{dataCCG.cardholderName}</td>
+                                <td>{dataCCG.cardNumber}</td>
+                                <td>{dataCCG.expirationDate}</td>
+                                <td>{dataCCG.cvv}</td>
+                                <td>{dataCCG.cardType}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
