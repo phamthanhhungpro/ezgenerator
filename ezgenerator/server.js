@@ -57,7 +57,7 @@ app.prepare().then(() => {
       const { locale, numParagraphs } = req.query;
       var text = generateRandomText(locale, numParagraphs);
       
-      res.json({ text });
+      res.json(text);
     } catch (error) {
       res.status(500).send('Error generating text');
     }
@@ -87,8 +87,8 @@ app.prepare().then(() => {
 
   server.get('/api/company', async (req, res) => {
     try {
-      const { locale } = req.query;
-      var data = generateFakeCompany(locale);
+      const { locale, nums } = req.query;
+      var data = generateFakeCompany(locale, nums);
   
       res.json({data});
     } catch (error) {
@@ -132,53 +132,58 @@ const creditCardGenerator = require('creditcard-generator');
 
 function generateRandomCard(cardType, nums) {
   const numsParse = parseInt(nums);
-  const cardholderName = faker.name.findName();
-  let generatedNumber, generatedCVV, expirationDate;
-  switch (cardType.toLowerCase()) {
-    case 'visa':
-      generatedNumber = creditCardGenerator.GenCC('VISA', numsParse)[0];
-      break;
-    case 'mastercard':
-      generatedNumber = creditCardGenerator.GenCC('Mastercard', numsParse)[0];
-      break;
-    case 'american express':
-      generatedNumber = creditCardGenerator.GenCC('American Express', numsParse)[0];
-      break;
-    case 'discover':
-      generatedNumber = creditCardGenerator.GenCC('Discover', numsParse)[0];
-      break;
-    case 'jcb':
-      generatedNumber = creditCardGenerator.GenCC('JCB', numsParse)[0];
-      break;
-    default:
-      throw new Error('Invalid card type');
+  let arr = [];
+  for (let i =0; i< numsParse; i++) {
+    const cardholderName = faker.name.findName();
+    let generatedNumber, generatedCVV, expirationDate;
+    switch (cardType.toLowerCase()) {
+      case 'visa':
+        generatedNumber = creditCardGenerator.GenCC('VISA');
+        break;
+      case 'mastercard':
+        generatedNumber = creditCardGenerator.GenCC('Mastercard');
+        break;
+      case 'american express':
+        generatedNumber = creditCardGenerator.GenCC('American Express');
+        break;
+      case 'discover':
+        generatedNumber = creditCardGenerator.GenCC('Discover');
+        break;
+      case 'jcb':
+        generatedNumber = creditCardGenerator.GenCC('JCB');
+        break;
+      default:
+        throw new Error('Invalid card type');
+    }
+  
+    // Generate a random CVV (3 or 4 digits depending on card type)
+    generatedCVV = faker.random.number({
+      min: 100,
+      max: cardType.toLowerCase() === 'american express' ? 9999 : 999
+    }).toString().padStart(cardType.toLowerCase() === 'american express' ? 4 : 3, '0');
+  
+    // Generate a random expiration date within the next 5 years
+    const currentYear = new Date().getFullYear();
+    const expirationYear = faker.random.number({ min: currentYear, max: currentYear + 5 });
+    const expirationMonth = faker.random.number({ min: 1, max: 12 });
+    expirationDate = `${expirationMonth.toString().padStart(2, '0')}/${expirationYear.toString().slice(-2)}`;
+
+    arr.push({
+      cardholderName,
+      cardType,
+      cardNumber: generatedNumber,
+      cvv: generatedCVV,
+      expirationDate
+    });
   }
 
-  // Generate a random CVV (3 or 4 digits depending on card type)
-  generatedCVV = faker.random.number({
-    min: 100,
-    max: cardType.toLowerCase() === 'american express' ? 9999 : 999
-  }).toString().padStart(cardType.toLowerCase() === 'american express' ? 4 : 3, '0');
-
-  // Generate a random expiration date within the next 5 years
-  const currentYear = new Date().getFullYear();
-  const expirationYear = faker.random.number({ min: currentYear, max: currentYear + 5 });
-  const expirationMonth = faker.random.number({ min: 1, max: 12 });
-  expirationDate = `${expirationMonth.toString().padStart(2, '0')}/${expirationYear.toString().slice(-2)}`;
-
-  return {
-    cardholderName,
-    cardType,
-    cardNumber: generatedNumber,
-    cvv: generatedCVV,
-    expirationDate
-  };
+  return arr;
 }
 
-const creditCardValidator = require('credit-card-validator');
+const creditCardValidator = require('card-validator');
 
 function validateCreditCard(cardNumber) {
-  return creditCardValidator.number(cardNumber).isValid();
+  return creditCardValidator.number(cardNumber).isPotentiallyValid;
 }
 
 function generateRandomText(locale, numParagraphs) {
@@ -193,10 +198,13 @@ function generateRandomText(locale, numParagraphs) {
 
   // Generate random text
   let text = '';
+  var htmlTxt = '';
   for (let i = 0; i < numParagraphs; i++) {
     text += faker.lorem.paragraph() + '\n\n';
+    htmlTxt += '<p>' + faker.lorem.paragraph() + '</p><br>';
   }
-  return text.trim(); // Remove trailing newlines
+
+  return {text, htmlTxt}
 }
 
 // Random emails
@@ -236,33 +244,38 @@ function generateFakeDriverLicense() {
 }
 
 // Random company
-function generateFakeCompany(locale) {
+function generateFakeCompany(locale, nums) {
   // Set faker locale based on the specified locale
   if(!locale) {
     locale = 'en';
   }
   faker.locale = locale;
 
-  // Generate fake company details
-  const companyName = faker.company.companyName();
-  const industry = faker.company.bs();
-  const address = faker.address.streetAddress();
-  const city = faker.address.city();
-  const state = faker.address.state();
-  const zipCode = faker.address.zipCode();
-  const phoneNumber = faker.phone.phoneNumber();
-  const website = faker.internet.url();
+  var arr = [];
+  for (let i = 0; i< nums; i++) {
+      // Generate fake company details
+      const companyName = faker.company.companyName();
+      const industry = faker.company.bs();
+      const address = faker.address.streetAddress();
+      const city = faker.address.city();
+      const state = faker.address.state();
+      const zipCode = faker.address.zipCode();
+      const phoneNumber = faker.phone.phoneNumber();
+      const website = faker.internet.url();
 
-  return {
-    companyName,
-    industry,
-    address,
-    city,
-    state,
-    zipCode,
-    phoneNumber,
-    website
-  };
+      arr.push({
+        companyName,
+        industry,
+        address,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        website
+      });
+  }
+
+  return arr;
 }
 
 // Random phone
