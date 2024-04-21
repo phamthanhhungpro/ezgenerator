@@ -9,11 +9,12 @@ export interface Company {
     zipCode: string
     phoneNumber: string
     website: string
+    email: string
   }
 
 const FakeCompany: React.FC = () => {
-    const [country, setCountry] = useState('us');
-    const [numsCompany, setNumsCompany] = useState('');
+    const [country, setCountry] = useState('en_US');
+    const [numsCompany, setNumsCompany] = useState(100);
     const [dataCompany, setDataCompany] = useState<Company[]>();
 
     function changeCountry(event: any) {
@@ -25,10 +26,21 @@ const FakeCompany: React.FC = () => {
     }
 
     async function generateCompany() {
-        const res = await fetch(`https://ezgenerator.onrender.com/api/company?locale=${country}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000/api/company?locale=${country}&nums=${numsCompany}`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataCompany(dataFetch.data);
     }
+
+    function exportToCSV() {
+        const csvContent = "data:text/csv;charset=utf-8," + 
+        dataCompany?.map(row => `${row.companyName},${row.industry},${row.website},${row.email},${row.phoneNumber}`).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link);
+        link.click();
+      };
 
     return (
         <div className='card-body mb-4 mt-3'>
@@ -46,7 +58,7 @@ const FakeCompany: React.FC = () => {
                         <div className="form-group">
                             <label>Company Country:</label>
                             <select id="country" name="country" value={country} onChange={changeCountry} className="form-control">
-                                <option value="us">United States</option>
+                                <option value="en_US">United States</option>
                                 <option value="uk">United Kingdom</option>
                                 <option value="vi">Viet Nam</option>
                                 <option value="fr">France</option>
@@ -77,7 +89,7 @@ const FakeCompany: React.FC = () => {
                                 <option value="en_ZA">South Africa</option>
                                 <option value="ko">South Korea</option>
                                 <option value="es">Spain</option>
-                                <option value="us">United States</option>
+                                <option value="en_US">United States</option>
                                 <option value="vi">Viet Nam</option>
                             </select>
                             <small id="countryHelp" className="form-text text-muted">The country where the company is located.</small>
@@ -120,7 +132,7 @@ const FakeCompany: React.FC = () => {
                     <th scope="col">Description</th>
                     <th scope="col">Website</th>
                     <th scope="col">Company Email</th>
-                    <th scope="col">EIN</th>
+                    <th scope="col">Phone Number</th>
                     </tr>
                 </thead>
                 <tbody className="text-start">
@@ -130,7 +142,7 @@ const FakeCompany: React.FC = () => {
                         <td>{company.companyName}</td>
                         <td>{company.industry}</td>
                         <td>{company.website}</td>
-                        <td>{company.address}</td>
+                        <td>{company.email}</td>
                         <td>{company.phoneNumber}</td>
                     </tr>
                 ))}

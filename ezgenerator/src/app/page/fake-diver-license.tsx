@@ -11,6 +11,7 @@ export interface drivers {
     licenseLastName: string
     licenseNum: string
     licenseSex: string
+    avt: string
   }
 
 const FakeDriverLicense: React.FC = () => {
@@ -105,7 +106,7 @@ const FakeDriverLicense: React.FC = () => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-md-4">
-                                <img src="https://fauxid.com/img/profiles/male/male30.jpeg" className="rounded img-fluid driverimage"></img>
+                                <img src="https://randomuser.me/api/portraits/men/56.jpg" className="rounded img-fluid driverimage"></img>
                             </div>
                             <div className="col-md-8">
                                 <h4 id="ID">ID: {dataDriver?.licenseNum}</h4>

@@ -82,3 +82,6 @@ body {
 .border-bottom-title{
   border-bottom: .1em solid #ad681f;
 }
+.textareaFCCG{
+  min-height: 300px !important;
+}

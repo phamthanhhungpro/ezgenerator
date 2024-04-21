@@ -5,6 +5,7 @@ const RandomText: React.FC = () => {
   const [selectRTCountry,setSelectRTCountry] = useState('en_US'); 
   const [numOfParagraphs,setNumOfParagraphs] = useState('1'); 
   const [dataText, setDataText] = useState('');
+  const [dataHtml, setDataHtml] = useState('');
 
   function changeLanguageRT(event: any) {
     setSelectRTCountry(event.target.value);
@@ -18,6 +19,7 @@ const RandomText: React.FC = () => {
     const res = await fetch(`https://ezgenerator.onrender.com/api/text/?locale=${selectRTCountry}&numParagraphs=${numOfParagraphs}`, {method: 'GET'});
     const dataFetch = await res.json();
     setDataText(dataFetch.text);
+    setDataHtml(dataFetch.htmlTxt);
   }
 
   return (
@@ -35,7 +37,7 @@ const RandomText: React.FC = () => {
                     <div className="col">
                     <label className="form-label title-select-top">Language:</label>
                     <select className="form-select" value={selectRTCountry} aria-label="Random" onChange={changeLanguageRT}>
-                      <option value="us">United States</option>
+                      <option value="en_US">United States</option>
                       <option value="uk">United Kingdom</option>
                       <option value="vi">Viet Nam</option>
                       <option value="fr">France</option>
@@ -66,7 +68,7 @@ const RandomText: React.FC = () => {
                       <option value="en_ZA">South Africa</option>
                       <option value="ko">South Korea</option>
                       <option value="es">Spain</option>
-                      <option value="us">United States</option>
+                      <option value="en_US">United States</option>
                       <option value="vi">Viet Nam</option>
                     </select>
                     </div>
@@ -90,7 +92,11 @@ const RandomText: React.FC = () => {
         <div className='row'>
             <div className='col-md-6'>
                 <h3 className="pt-2 pb-3 fs-4 bellowTitlev2">Random "Real" Text</h3>
-                <p>{dataText}</p>
+                <div dangerouslySetInnerHTML={{ __html: dataHtml }} />
+            </div>
+            <div className='col-md-6'>
+                <h3 className="pt-2 pb-3 fs-4 bellowTitlev2">Random "Real" HTML Text</h3>
+                <p>{dataHtml}</p>
             </div>
         </div>
     </div>
