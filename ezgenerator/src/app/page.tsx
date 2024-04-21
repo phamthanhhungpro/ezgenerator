@@ -158,7 +158,7 @@ export default function Home() {
   }, []);
   
   async function generateKey() {
-    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}}&nat=${country}`, {method: 'GET'});
+    const res = await fetch(`https://ezgenerator.onrender.com/api/random-user/?gender=${gender}}&nat=${country}`, {method: 'GET'});
     const dataFetch = await res.json();
     setProfile(dataFetch);
   }
