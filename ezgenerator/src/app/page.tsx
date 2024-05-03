@@ -1,6 +1,6 @@
 'use client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { SetStateAction, useEffect, useState } from "react";
 import { format } from 'date-fns';
 import RandomText from './page/random-text';
@@ -192,6 +192,17 @@ export default function Home() {
     }
   }
   
+  function handleCopy(text: string) {
+    console.log("Copying text to clipboard:", text);
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log("Text copied to clipboard");
+      })
+      .catch((error) => {
+        console.error("Failed to copy text to clipboard:", error);
+      });
+  }
+
   async function generateKey() {
     const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}&nat=${country}`, {method: 'GET'});
     const dataFetch = await res.json();
@@ -462,37 +473,116 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Fake Name: {profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}</td>
-                          <td>Random Face:</td>
+                          <td>
+                            <span className="titleField"> Fake Name: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].name.title} ${profile?.results[0].name.first} ${profile?.results[0].name.last}`)}>
+                              {profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last} 
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Random Face:</span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Latitude & longitude: {profile?.results[0].location.coordinates.latitude}   ;   {profile?.results[0].location.coordinates.longitude}</td>
-                          <td>Random Avatar: <span className="aclass" onClick={() => downloadImage(profile?.results[0].picture.large ?? '')}> Download image <FontAwesomeIcon icon={faDownload} /></span></td>
+                          <td>
+                            <span className="titleField"> Latitude & longitude:</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].location.coordinates.latitude},${profile?.results[0].location.coordinates.longitude}`)}>
+                              {profile?.results[0].location.coordinates.latitude} , {profile?.results[0].location.coordinates.longitude} 
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Random Avatar: </span>
+                            <span className="aDownloadclass" onClick={() => downloadImage(profile?.results[0].picture.large ?? '')}> Download image <FontAwesomeIcon icon={faDownload} /></span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Phone: {profile?.results[0].phone}</td>
-                          <td>QR Code:</td>
+                          <td>
+                            <span className="titleField"> Phone: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].phone}`)}>
+                            {profile?.results[0].phone} 
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> QR Code:</span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Social Security Number: {profile?.results[0].id.value}</td>
+                          <td>
+                            <span className="titleField"> Social Security Number: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].id.value}`)}>
+                              {profile?.results[0].id.value} 
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Date of Birth: {profile?.results[0].dob.date ? format(profile?.results[0].dob.date, "MM-dd-yyyy") : ''}</td>
-                          <td>Height: {profile?.moreData.height}</td>
-                          <td>Weight: {profile?.moreData.weight}</td>
+                          <td>
+                            <span className="titleField"> Date of Birth: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].dob.date ? format(profile?.results[0].dob.date, "MM-dd-yyyy") : ''}`)}>
+                            {profile?.results[0].dob.date ? format(profile?.results[0].dob.date, "MM-dd-yyyy") : ''} 
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Height: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.height}`)}>
+                            {profile?.moreData.height}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Weight: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.weight}`)}>
+                              {profile?.moreData.weight}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Gender: {profile?.results[0].gender}</td>
-                          <td>Hair Color: {profile?.moreData.hairColor}</td>
-                          <td>Eye Color: {profile?.moreData.ethnicity}</td>
+                          <td>
+                            <span className="titleField"> Gender: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].gender}`)}>
+                              {profile?.results[0].gender}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Hair Color: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.hairColor}`)}>
+                              {profile?.moreData.hairColor}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Eye Color: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.ethnicity}`)}>
+                              {profile?.moreData.ethnicity}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Ethnicity:{profile?.moreData.ethnicity}</td>
-                          <td>Blood Type: {profile?.moreData.weight}</td>
+                          <td>
+                            <span className="titleField"> Ethnicity:</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.ethnicity}`)}>
+                              {profile?.moreData.ethnicity}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Blood Type: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.bloodType}`)}>
+                              {profile?.moreData.bloodType}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                           <td></td>
                         </tr>
                       </tbody>
@@ -501,20 +591,50 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Credit Card Number:</td>
-                          <td>Bank: {profile?.moreData.bankName}</td>
+                          <td>
+                            <span className="titleField"> Credit Card Number:</span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Bank: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.bankName}`)}>
+                              {profile?.moreData.bankName}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Exp Date:</td>
-                          <td>Bank Account Number: {profile?.moreData.bankNumber}</td>
+                          <td>
+                            <span className="titleField"> Exp Date:</span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Bank Account Number: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.bankNumber}`)}>
+                              {profile?.moreData.bankNumber}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>CVV:</td>
-                          <td>Routing Number: {profile?.moreData.routingNumber}</td>
+                          <td>
+                            <span className="titleField"> CVV:</span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Routing Number: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.routingNumber}`)}>
+                              {profile?.moreData.routingNumber}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
                           <td></td>
-                          <td>IBAN: {profile?.moreData.iban}</td>
+                          <td>
+                            <span className="titleField"> IBAN: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.iban}`)}>
+                              {profile?.moreData.iban}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -522,28 +642,93 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Username: {profile?.moreData.username}</td>
-                          <td>IP Address (IPv4): {profile?.moreData.ipAddress}</td>
+                          <td>
+                            <span className="titleField"> Username: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.username}`)}>
+                              {profile?.moreData.username}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> IP Address (IPv4): </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.ipAddress}`)}>
+                              {profile?.moreData.ipAddress}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Password: {profile?.results[0].login.password}</td>
-                          <td>IP Address (Local): {profile?.moreData.ipv6Address}</td>
+                          <td>
+                            <span className="titleField"> Password: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].login.password}`)}>
+                              {profile?.results[0].login.password}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> IP Address (Local): </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.ipv6Address}`)}>
+                              {profile?.moreData.ipv6Address}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                            </td>
                         </tr>
                         <tr>
-                          <td>Email Address: {profile?.results[0].email}</td>
-                          <td>MAC Address: {profile?.moreData.macAddress}</td>
+                          <td>
+                            <span className="titleField"> Email Address: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].email}`)}>
+                              {profile?.results[0].email}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> MAC Address: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.macAddress}`)}>
+                              {profile?.moreData.macAddress}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Unique User Identifier (UUID):</td>
-                          <td>IP Address (IPv6):{profile?.moreData.ipv6Address}</td>
+                          <td>
+                            <span className="titleField"> Unique User Identifier (UUID):</span>
+                          </td>
+                          <td>
+                            <span className="titleField"> IP Address (IPv6):</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.ipv6Address}`)}>
+                              {profile?.moreData.ipv6Address}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Website: {profile?.moreData.websiteUrl}</td>
-                          <td>Random Emoji:</td>
+                          <td>
+                            <span className="titleField"> Website: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.websiteUrl}`)}>
+                              {profile?.moreData.websiteUrl}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                            </td>
+                          <td>
+                            <span className="titleField"> Random Emoji:</span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Color: {profile?.moreData.hairColor}</td>
-                          <td>User Agent: {profile?.moreData.userAgent}</td>
+                          <td>
+                            <span className="titleField"> Color: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.hairColor}`)}>
+                              {profile?.moreData.hairColor}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                            <div style={{backgroundColor: `${profile?.moreData.hairColor}`, width: "20px", height: "20px", marginLeft: "10px", display: "inline-block"}}></div>
+                          </td>
+                          <td>
+                            <span className="titleField"> User Agent: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.userAgent}`)}>
+                              {profile?.moreData.userAgent}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -551,8 +736,20 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Education Level: {profile?.moreData.degree}</td>
-                          <td>University: {profile?.moreData.school}</td>
+                          <td>
+                            <span className="titleField"> Education Level: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.degree}`)}>
+                              {profile?.moreData.degree}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> University: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.school}`)}>
+                              {profile?.moreData.school}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -560,16 +757,48 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Fake Company Name: {profile?.moreData.companyName}</td>
-                          <td>Salary: {profile?.moreData.salary}</td>
+                          <td>
+                            <span className="titleField"> Fake Company Name: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.companyName}`)}>
+                              {profile?.moreData.companyName}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Salary: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.salary}`)}>
+                              {profile?.moreData.salary}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Company Description: {profile?.moreData.companyDescription}</td>
-                          <td>Employee Title:</td>
+                          <td>
+                            <span className="titleField"> Company Description: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.companyDescription}`)}>
+                              {profile?.moreData.companyDescription}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField">Employee Title: </span>
+                          </td>
                         </tr>
                         <tr>
-                          <td>Company EIN: {profile?.moreData.ein}</td>
-                          <td>Company Email: {profile?.moreData.email}</td>
+                          <td>
+                            <span className="titleField"> Company EIN: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.ein}`)}>
+                              {profile?.moreData.ein}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Company Email: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.email}`)}>
+                              {profile?.moreData.email}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy}/></span>
+                            </span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>

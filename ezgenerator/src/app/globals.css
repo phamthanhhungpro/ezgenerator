@@ -85,10 +85,33 @@ body {
 .textareaFCCG{
   min-height: 300px !important;
 }
+.aDownloadclass{
+  cursor: pointer;
+}
+.aDownloadclass:hover{
+  color: #ba9537;
+  text-decoration:underline;
+  .iconCopyHidden{
+    display: inline !important;
+  }
+}
 .aclass{
+  margin-left: 5px;
   cursor: pointer;
 }
 .aclass:hover{
   color: #ba9537;
-  text-decoration:underline;
+  .iconCopyHidden{
+    display: inline !important;
+  }
+}
+
+.iconCopyHidden{
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  display: none;
+}
+.titleField{
+  font-weight: bold;
 }
