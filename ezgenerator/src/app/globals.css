@@ -85,3 +85,10 @@ body {
 .textareaFCCG{
   min-height: 300px !important;
 }
+.aclass{
+  cursor: pointer;
+}
+.aclass:hover{
+  color: #ba9537;
+  text-decoration:underline;
+}

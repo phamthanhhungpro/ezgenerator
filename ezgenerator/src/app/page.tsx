@@ -11,6 +11,7 @@ import FakeDriverLicense from "./page/fake-diver-license";
 import FakeCompany from "./page/fake-company";
 import FakePhoneNumber from "./page/fake-phone-number";
 import FakeSocialSecurityNumber from "./page/fake-social-security-number";
+import axios from "axios";
 
 export interface Profile {
   results: Result[]
@@ -153,12 +154,46 @@ export default function Home() {
   const [state, setState] = useState('');
   const [selectSideNavData, setSelectSideNavData] = useState('IG');
   
+  const [imageSrc, setImageSrc] = useState('');
+
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      "Access-Control-Allow-Headers": "content-type",
+      "Access-Control-Allow-Credentials": "true"
+    }
+  };
+
   useEffect(() => {
     generateKey();
   }, []);
   
+  async function downloadImage(imageUrl: string) {
+    try {
+      const response = await fetch(imageUrl, { 
+        mode: 'cors',
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          "Access-Control-Allow-Headers": "content-type",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        setImageSrc(url);
+      } else {
+        console.error('Error downloading image:', response.status);
+      }
+    } catch (error) {
+      console.error('Error downloading image:', error);
+    }
+  }
+  
   async function generateKey() {
-    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}}&nat=${country}`, {method: 'GET'});
+    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}&nat=${country}`, {method: 'GET'});
     const dataFetch = await res.json();
     setProfile(dataFetch);
   }
@@ -422,8 +457,8 @@ export default function Home() {
             <div className="col-md-9" id="randomUserDisplaySection">
               <div className="card shadow-lg">
                 {selectSideNavData === 'IG' && (
-                  <><div className="card-header pt-5 shadow-sm text-center"><img src={profile?.results[0].picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div><div className="card-body mb-4 mt-5">
-                    <h3 className="card-title pt-2 fs-2 text-center" >{profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}</h3>
+                    <><div className="card-header pt-5 shadow-sm text-center"><img src={profile?.results[0].picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div><div className="card-body mb-4 mt-5">
+                    <h3 className="card-title pt-2 fs-</div>2 text-center" >{profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}</h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
@@ -432,14 +467,14 @@ export default function Home() {
                         </tr>
                         <tr>
                           <td>Latitude & longitude: {profile?.results[0].location.coordinates.latitude}   ;   {profile?.results[0].location.coordinates.longitude}</td>
-                          <td>Random Avatar:</td>
+                          <td>Random Avatar: <span className="aclass" onClick={() => downloadImage(profile?.results[0].picture.large ?? '')}> Download image <FontAwesomeIcon icon={faDownload} /></span></td>
                         </tr>
                         <tr>
                           <td>Phone: {profile?.results[0].phone}</td>
                           <td>QR Code:</td>
                         </tr>
                         <tr>
-                          <td>Social Security Number:</td>
+                          <td>Social Security Number: {profile?.results[0].id.value}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -516,7 +551,7 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Education Level:</td>
+                          <td>Education Level: {profile?.moreData.degree}</td>
                           <td>University: {profile?.moreData.school}</td>
                         </tr>
                       </tbody>
@@ -525,7 +560,7 @@ export default function Home() {
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
-                          <td>Fake Company Name: {profile?.moreData.companyDescription}</td>
+                          <td>Fake Company Name: {profile?.moreData.companyName}</td>
                           <td>Salary: {profile?.moreData.salary}</td>
                         </tr>
                         <tr>
