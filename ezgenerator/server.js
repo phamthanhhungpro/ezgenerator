@@ -4,6 +4,8 @@ const faker = require('faker');
 
 const next = require('next');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path'); // Import the path module
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -120,6 +122,31 @@ app.prepare().then(() => {
       res.status(500).send('Error generating');
     }
   });
+
+  // Route to download an image from a URL
+  server.get('/api/download', async (req, res) => {
+    const { imageUrl, imageName } = req.query;
+
+    try {
+      // Make request to the image URL
+      const response = await axios({
+          url: imageUrl,
+          method: 'GET',
+          responseType: 'stream'
+      });
+
+      // Set headers to trigger browser download
+      res.setHeader('Content-Disposition', `attachment; filename="${imageName}"`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+
+      // Pipe the image data to the response
+      response.data.pipe(res);
+  } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).send('Error downloading image');
+  }
+  });
+
   server.all('*', (req, res) => {
     return handle(req, res);
   });
