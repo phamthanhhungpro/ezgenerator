@@ -367,6 +367,7 @@ function getAdditionalInfo() {
   const jobTitle = faker.name.jobTitle();
   const salary = faker.random.number({ min: 1000, max: 50000 });
 
+  const creditcard = generateRandomCard("visa", 1);
   return {
     height,
     weight,
@@ -393,6 +394,7 @@ function getAdditionalInfo() {
     companyDescription,
     ein,
     jobTitle,
-    salary
+    salary,
+    creditcard
   };
 }
