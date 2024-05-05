@@ -19,117 +19,121 @@ export interface Profile {
   moreData: MoreData
 }
 
-export interface Result {
-  gender: string
-  name: Name
-  location: Location
-  email: string
-  login: Login
-  dob: Dob
-  registered: Registered
-  phone: string
-  cell: string
-  id: Id
-  picture: Picture
-  nat: string
-}
-
-export interface Name {
-  title: string
-  first: string
-  last: string
-}
-
-export interface Location {
-  street: Street
-  city: string
-  state: string
-  country: string
-  postcode: number
-  coordinates: Coordinates
-  timezone: Timezone
-}
-
-export interface Street {
-  number: number
-  name: string
-}
-
-export interface Coordinates {
-  latitude: string
-  longitude: string
-}
-
-export interface Timezone {
-  offset: string
-  description: string
-}
-
-export interface Login {
-  uuid: string
-  username: string
-  password: string
-  salt: string
-  md5: string
-  sha1: string
-  sha256: string
-}
-
-export interface Dob {
-  date: string
-  age: number
-}
-
-export interface Registered {
-  date: string
-  age: number
-}
-
-export interface Id {
-  name: string
-  value: string
-}
-
-export interface Picture {
-  large: string
-  medium: string
-  thumbnail: string
-}
-
 export interface Info {
-  seed: string
-  results: number
-  page: number
-  version: string
+  seed:    string;
+  results: number;
+  page:    number;
+  version: string;
 }
 
 export interface MoreData {
-  height: number
-  weight: number
-  bloodType: string
-  ethnicity: string
-  hairColor: string
-  bankName: string
-  bankNumber: string
-  routingNumber: string
-  iban: string
-  email: string
-  username: string
-  domainName: string
-  domainWord: string
-  urlWithQueryParams: string
-  ipAddress: string
-  ipv6Address: string
-  macAddress: string
-  websiteUrl: string
-  userAgent: string
-  degree: string
-  school: string
-  companyName: string
-  companyDescription: string
-  ein: number
-  jobTitle: string
-  salary: number
+  height:             number;
+  weight:             number;
+  bloodType:          string;
+  ethnicity:          string;
+  hairColor:          string;
+  bankName:           string;
+  bankNumber:         string;
+  routingNumber:      string;
+  iban:               string;
+  email:              string;
+  username:           string;
+  domainName:         string;
+  domainWord:         string;
+  urlWithQueryParams: string;
+  ipAddress:          string;
+  ipv6Address:        string;
+  macAddress:         string;
+  websiteUrl:         string;
+  userAgent:          string;
+  degree:             string;
+  school:             string;
+  companyName:        string;
+  companyDescription: string;
+  ein:                number;
+  jobTitle:           string;
+  salary:             number;
+  creditcard:         Creditcard[];
+}
+
+export interface Creditcard {
+  cardholderName: string;
+  cardType:       string;
+  cardNumber:     string[];
+  cvv:            string;
+  expirationDate: string;
+}
+
+export interface Result {
+  gender:     string;
+  name:       Name;
+  location:   Location;
+  email:      string;
+  login:      Login;
+  dob:        Dob;
+  registered: Dob;
+  phone:      string;
+  cell:       string;
+  id:         ID;
+  picture:    Picture;
+  nat:        string;
+}
+
+export interface Dob {
+  date: Date;
+  age:  number;
+}
+
+export interface ID {
+  name:  string;
+  value: string;
+}
+
+export interface Location {
+  street:      Street;
+  city:        string;
+  state:       string;
+  country:     string;
+  postcode:    number;
+  coordinates: Coordinates;
+  timezone:    Timezone;
+}
+
+export interface Coordinates {
+  latitude:  string;
+  longitude: string;
+}
+
+export interface Street {
+  number: number;
+  name:   string;
+}
+
+export interface Timezone {
+  offset:      string;
+  description: string;
+}
+
+export interface Login {
+  uuid:     string;
+  username: string;
+  password: string;
+  salt:     string;
+  md5:      string;
+  sha1:     string;
+  sha256:   string;
+}
+
+export interface Name {
+  title: string;
+  first: string;
+  last:  string;
+}
+
+export interface Picture {
+  large:     string;
+  medium:    string;
+  thumbnail: string;
 }
 
 
@@ -605,6 +609,10 @@ export default function Home() {
                         <tr>
                           <td>
                             <span className="titleField"> Credit Card Number:</span>
+                              <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.creditcard[0].cardNumber}`)}>
+                                {profile?.moreData.creditcard[0].cardNumber}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
                           </td>
                           <td>
                             <span className="titleField"> Bank: </span>
@@ -617,6 +625,10 @@ export default function Home() {
                         <tr>
                           <td>
                             <span className="titleField"> Exp Date:</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.creditcard[0].expirationDate}`)}>
+                              {profile?.moreData.creditcard[0].expirationDate}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
                           </td>
                           <td>
                             <span className="titleField"> Bank Account Number: </span>
@@ -629,6 +641,10 @@ export default function Home() {
                         <tr>
                           <td>
                             <span className="titleField"> CVV:</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.creditcard[0].cvv}`)}>
+                              {profile?.moreData.creditcard[0].cvv}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
                           </td>
                           <td>
                             <span className="titleField"> Routing Number: </span>
@@ -639,7 +655,13 @@ export default function Home() {
                           </td>
                         </tr>
                         <tr>
-                          <td></td>
+                          <td>
+                            <span className="titleField"> Type Card:</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.creditcard[0].cardType}`)}>
+                              {profile?.moreData.creditcard[0].cardType}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                          </td>
                           <td>
                             <span className="titleField"> IBAN: </span>
                             <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.iban}`)}>
@@ -794,6 +816,10 @@ export default function Home() {
                           </td>
                           <td>
                             <span className="titleField">Employee Title: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.jobTitle}`)}>
+                              {profile?.moreData.jobTitle}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
                           </td>
                         </tr>
                         <tr>
