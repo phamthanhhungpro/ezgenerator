@@ -18,13 +18,15 @@ app.prepare().then(() => {
 
   server.get('/api/random-user', async (req, res) => {
     try {
-      const { gender, nat } = req.query;
+      const { gender, nat, ageRange } = req.query;
       const apiUrl = `${randomUserApi}?gender=${gender || 'all'}&nat=${nat || 'us'}`;
 
+      console.log(apiUrl);
       const response = await axios.get(apiUrl);
       const data = response.data;
       var additionalData = getAdditionalInfo();
       data.moreData = additionalData;
+      data.results[0].dob = getRandomDateOfBirth(ageRange);
       res.json(data);
     } catch (error) {
       console.error('Error fetching random user:', error);
@@ -396,5 +398,40 @@ function getAdditionalInfo() {
     jobTitle,
     salary,
     creditcard
+  };
+}
+function getRandomDateOfBirth(range) {
+  let minAge, maxAge;
+
+  // Check if range is empty
+  if (range === undefined || range.trim() === '') {
+    // Define default age range
+    minAge = 18;
+    maxAge = 25;
+  } else {
+    // Parse the range string
+    [minAge, maxAge] = range.split('-').map(Number);
+  }
+
+  // Calculate minimum and maximum birth years based on age range
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const minBirthYear = currentYear - maxAge;
+  const maxBirthYear = currentYear - minAge;
+
+  // Generate a random birth year between min and max
+  const birthYear = faker.random.number({ min: minBirthYear, max: maxBirthYear });
+
+  // Generate a random birth month and day
+  const birthMonth = faker.random.number({ min: 1, max: 12 });
+  const maxDaysInMonth = new Date(birthYear, birthMonth, 0).getDate(); // Get the maximum number of days in the birth month
+  const birthDay = faker.random.number({ min: 1, max: maxDaysInMonth });
+
+  // Format the date of birth
+  const dateOfBirth = new Date(birthYear, birthMonth - 1, birthDay);
+
+  return {
+    date : dateOfBirth,
+    age :  currentYear - birthYear
   };
 }
