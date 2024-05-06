@@ -153,7 +153,7 @@ export default function Home() {
   const [classFSSN, setClassFSSN] = useState('nav-link');
 
   const [gender, setGender] = useState('male');
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState('1-90');
   const [country, setCountry] = useState('us');
   const [state, setState] = useState('');
   const [selectSideNavData, setSelectSideNavData] = useState('IG');
@@ -220,7 +220,7 @@ export default function Home() {
   }
 
   async function generateKey() {
-    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}&nat=${country}`, { method: 'GET' });
+    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}&nat=${country}&ageRange=${age}`, { method: 'GET' });
     const dataFetch = await res.json();
     setProfile(dataFetch);
   }
@@ -301,8 +301,8 @@ export default function Home() {
         <div className="row pb-5">
           <div className="header-inner-div col-md-12 text-center">
             <h2 className="fs-1 fw-normal text-uppercase">Random User Generator</h2>
-            <p className="fw-lighter">Random user generator is a practice project made by random user api and
-              bootstrap 5. By this website you can generate a random person info and use anywhere.</p>
+            <p className="fw-lighter"><a className="taga" href="">randominfor.com</a> is a free tool to generate full fake identities with random First and Last Name, Address, Social Security Number, Credit Card, Phone Number, and more!</p>
+            <p className="fw-lighter">Protect your privacy by only using your true identity when absolutely necessary.</p>
             <div className="mb-3 container">
               <div className="row">
                 <div className="col">
@@ -315,51 +315,39 @@ export default function Home() {
                 <div className="col">
                   <label className="form-label title-select-top">Age</label>
                   <select value={age} onChange={changeAge} className="form-select" aria-label="Random">
-                    <option value="1">Random</option>
-                    <option value="2">18 to 24</option>
-                    <option value="3">25 to 34</option>
-                    <option value="3">35 to 44</option>
-                    <option value="3">45 to 54</option>
-                    <option value="3">55 to 64</option>
-                    <option value="3">65+</option>
+                    <option value="1-90">Random</option>
+                    <option value="18-24">18 to 24</option>
+                    <option value="25-34">25 to 34</option>
+                    <option value="35-44">35 to 44</option>
+                    <option value="45-54">45 to 54</option>
+                    <option value="55-64">55 to 64</option>
+                    <option value="65-90">65+</option>
                   </select>
                 </div>
                 <div className="col">
                   <label className="form-label title-select-top">Country</label>
                   <select value={country} onChange={changeCountry} className="form-select" aria-label="Random">
-                    <option value="en_US">United States</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="vi">Viet Nam</option>
-                    <option value="fr">France</option>
+                    <option value="au">Australia</option>
+                    <option value="br">Brazil</option>
+                    <option value="ca">Canada</option>
+                    <option value="ch">Switzerland</option>
                     <option value="de">Germany</option>
-                    <option value="zh_CN">China</option>
-                    <option value="en_IND">India</option>
-                    <option value="">---</option>
-                    <option value="ar">Argentina</option>
-                    <option value="bd">Bangladesh</option>
-                    <option value="nl_BE">Belgium</option>
-                    <option value="pt_BR">Brazil</option>
-                    <option value="en_CA">Canada</option>
-                    <option value="zh_CN">China</option>
-                    <option value="hr">Croatia</option>
-                    <option value="cz">Czech Republic</option>
-                    <option value="fi">Finland</option>
-                    <option value="fr">France</option>
-                    <option value="ge">Georgia</option>
-                    <option value="de">Germany</option>
-                    <option value="en_IND">Indonesia</option>
-                    <option value="it">Italy</option>
-                    <option value="ja">Japan</option>
-                    <option value="nl">Netherlands</option>
-                    <option value="nb_NO">Norway</option>
-                    <option value="pl">Poland</option>
-                    <option value="ru">Russian Federation</option>
-                    <option value="sk">Slovakia</option>
-                    <option value="en_ZA">South Africa</option>
-                    <option value="ko">South Korea</option>
-                    <option value="es">Spain</option>
-                    <option value="en_US">United States</option>
-                    <option value="vi">Viet Nam</option>
+                    <option value="dk">Denmark</option>
+                    <option value="es">Spain </option>
+                    <option value="fl">Finland</option>
+                    <option value="fr">France </option>
+                    <option value="gb">United Kingdom</option>
+                    <option value="ie">Ireland</option>
+                    <option value="in">India</option>
+                    <option value="ir">Iran</option>
+                    <option value="mx">Mexico </option>
+                    <option value="nl">Netherlands </option>
+                    <option value="no">Norway</option>
+                    <option value="nz">New Zealand</option>
+                    <option value="rs">Serbia </option>
+                    <option value="tr">Turkey</option>
+                    <option value="ua">Ukraine</option>
+                    <option value="us">United States</option>
                   </select>
                 </div>
                 <div className="col">
@@ -485,7 +473,10 @@ export default function Home() {
               <div className="card shadow-lg">
                 {selectSideNavData === 'IG' && (
                   <><div className="card-header pt-5 shadow-sm text-center"><img src={profile?.results[0].picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div><div className="card-body mb-4 mt-5">
-                    <h3 className="card-title pt-2 fs-</div>2 text-center" >{profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}</h3>
+                    <h3 className="card-title pt-2 fs-</div>2 text-center" ><span className="aclass" onClick={() => handleCopy(`${profile?.results[0].name.title} ${profile?.results[0].name.first} ${profile?.results[0].name.last}`)}>
+                              {profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}
+                              <span className="iconCopyHiddenTitle"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span></h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>

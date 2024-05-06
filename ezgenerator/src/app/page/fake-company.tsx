@@ -105,12 +105,8 @@ const FakeCompany: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="col-md-6">
                     </div>
-                    </div>
-                </div>
-            </div>
-            <div className="row mt-4">
+                    <div className="row mt-4">
                 <div className="col-md-8">
                     <h2 className="card-title pt-1 pb-1 fs-4 titleShowCompany">
                         Fake Netherlands Company Names
@@ -148,6 +144,9 @@ const FakeCompany: React.FC = () => {
                 ))}
                 </tbody>
             </table>
+                </div>
+            </div>
+            
         </div>
     );
 };

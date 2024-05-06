@@ -94,6 +94,9 @@ body {
   .iconCopyHidden{
     display: inline !important;
   }
+  .iconCopyHiddenTitle{
+    display: inline !important;
+  }
 }
 .aclass{
   margin-left: 5px;
@@ -102,6 +105,9 @@ body {
 .aclass:hover{
   color: #ba9537;
   .iconCopyHidden{
+    display: inline !important;
+  }
+  .iconCopyHiddenTitle{
     display: inline !important;
   }
 }
@@ -114,4 +120,16 @@ body {
 }
 .titleField{
   font-weight: bold;
+}
+
+.taga{
+  color: #cc893f;
+  text-decoration: auto;
+  font-weight: 600;
+}
+
+.iconCopyHiddenTitle{
+  font-size: 20px;
+  margin-left: 5px;
+  display: none;
 }
