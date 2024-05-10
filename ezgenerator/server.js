@@ -18,15 +18,24 @@ app.prepare().then(() => {
 
   server.get('/api/random-user', async (req, res) => {
     try {
-      const { gender, nat, ageRange } = req.query;
+      let { gender, nat, ageRange } = req.query;
+      nat = "vi";
       const apiUrl = `${randomUserApi}?gender=${gender || 'all'}&nat=${nat || 'us'}`;
 
-      console.log(apiUrl);
-      const response = await axios.get(apiUrl);
-      const data = response.data;
-      var additionalData = getAdditionalInfo();
+      let data = {};
+      if(nat === 'vi') {
+        data = getUserInfoByNat(gender, nat);
+      } 
+      else {
+        const response = await axios.get(apiUrl);
+        data = response.data;
+        data.results[0].email = faker.internet.email();
+      }
+
+      var additionalData = getAdditionalInfo(nat);
       data.moreData = additionalData;
       data.results[0].dob = getRandomDateOfBirth(ageRange);
+      data.cryptoAddress = generateCryptoAddress();
       res.json(data);
     } catch (error) {
       console.error('Error fetching random user:', error);
@@ -296,7 +305,8 @@ function generateFakeCompany(locale, nums) {
     const zipCode = faker.address.zipCode();
     const phoneNumber = faker.phone.phoneNumber();
     const website = faker.internet.url();
-    const email = faker.internet.email();
+
+    const email = generateBussinessEmail();
 
     arr.push({
       companyName,
@@ -338,20 +348,28 @@ function generateFakeSSN(state) {
   return { ssn, issueDate, state };
 }
 
-function getAdditionalInfo() {
+function getAdditionalInfo(nat) {
   const height = faker.random.number({ min: 140, max: 200 });
   const weight = faker.random.number({ min: 40, max: 120 });
   const bloodType = faker.random.arrayElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
   const ethnicities = ['Asian', 'Black', 'Hispanic', 'White', 'Mixed'];
   const ethnicity = faker.random.arrayElement(ethnicities);
   const hairColor = faker.internet.color();
-  const bankNames = ['Chase Bank', 'Wells Fargo', 'Bank of America', 'Citibank', 'TD Bank', 'US Bank', 'Capital One', 'PNC Bank', 'HSBC', 'SunTrust Bank'];
+  let bankNames = ['Chase Bank', 'Wells Fargo', 'Bank of America', 'Citibank', 'TD Bank', 'US Bank', 'Capital One', 'PNC Bank', 'HSBC', 'SunTrust Bank'];
+  if(nat === 'vi') {
+    bankNames = ['Vietcombank', 'Techcombank', 'BIDV', 'Agribank', 'VietinBank', 'Sacombank', 'ACB', 'VPBank', 'MBBank', 'HDBank'];
+  }
   const bankName = faker.random.arrayElement(bankNames);
   const bankNumber = faker.random.number({ min: 1000000000, max: 9999999999 }).toString();
   const routingNumber = faker.random.number({ min: 100000000, max: 999999999 }).toString();
-  const countryCode = faker.address.countryCode();
+  let countryCode = faker.address.countryCode();
+  if(nat === 'vi') {
+    countryCode = 'VN';
+  }
   const iban = `${countryCode}${faker.random.alphaNumeric(24)}`;
-  const email = faker.internet.email();
+  
+  const email = generateBussinessEmail();
+  
   const username = faker.internet.userName();
   const domainName = faker.internet.domainName();
   const domainWord = faker.internet.domainWord();
@@ -368,6 +386,7 @@ function getAdditionalInfo() {
   const ein = faker.random.number({ min: 100000000, max: 999999999 });
   const jobTitle = faker.name.jobTitle();
   const salary = faker.random.number({ min: 1000, max: 50000 });
+  const salaryPerHour = faker.random.number({ min: 10, max: 100 });
 
   const creditcard = generateRandomCard("visa", 1);
   return {
@@ -397,6 +416,7 @@ function getAdditionalInfo() {
     ein,
     jobTitle,
     salary,
+    salaryPerHour,
     creditcard
   };
 }
@@ -434,4 +454,125 @@ function getRandomDateOfBirth(range) {
     date : dateOfBirth,
     age :  currentYear - birthYear
   };
+}
+
+function getUserInfoByNat(gender, nat) {
+  // Set Faker.js locale based on nationality
+  faker.locale = nat.toLowerCase();
+
+  // Generate a random user object using Faker.js
+  const user = faker.helpers.userCard();
+  console.log(user);
+
+  // Filter the generated user based on gender and nationality
+  const filteredUser = {
+    gender: gender,
+    nat: nat,
+    name: {
+      title: gender === 'male' ? 'Mr' : 'Ms',
+      first: user.name.split(' ')[0],
+      last: user.name.split(' ')[1] + " " + user.name.split(' ')[2],
+    },
+    location: {
+      street: {
+        number: user.address.geo.lng,
+        name: user.address.street.name
+      },
+      city: user.address.city,
+      state: user.address.state,
+      country: user.address.country,
+      postcode: user.address.zipcode,
+      coordinates: {
+        latitude: user.address.geo.lat,
+        longitude: user.address.geo.lng
+      },
+      timezone: {
+        // offset: user.address.timezone.offset,
+        // description: user.address.timezone.description
+      }
+    },
+    email: user.email,
+    login: {
+      // uuid: user.login.uuid,
+      // username: user.login.username,
+      // password: user.login.password,
+      // salt: user.login.salt,
+      // md5: user.login.md5,
+      // sha1: user.login.sha1,
+      // sha256: user.login.sha256
+    },
+    dob: {
+      // date: user.dob.date,
+      // age: user.dob.age
+    },
+    registered: {
+      // date: user.registered.date,
+      // age: user.registered.age
+    },
+    phone: user.phone,
+    cell: user.cell,
+    id: {
+      // name: user.id.name,
+      // value: user.id.value
+    },
+    picture: {
+      large: randomFace(gender),
+      medium: randomFace(gender),
+      thumbnail: randomFace(gender),
+    }
+  };
+  let results = [];
+  results.push(filteredUser);
+
+  return {results};
+}
+
+function generateBussinessEmail() {
+  const businessDomains = [
+    'acme.com',
+    'widgetcorp.com',
+    'techsolutions.biz',
+    'globalenterprises.net',
+    'innovationinc.org',
+    'cyberdyne.org',
+    'ventureforge.com',
+    'apexindustries.net',
+    'synergytech.com',
+    'frontierconsulting.biz',
+    'dynamicventures.net',
+    'eagleenterprises.org',
+    'stellarcorp.com',
+    'powerhouseindustries.net',
+    'unitedsolutions.biz',
+    'mercurytechnologies.org',
+    'quicksilverenterprises.com',
+    'nexustech.net',
+    'horizonindustries.biz',
+    'peakperformancesolutions.org'
+  ];
+  const randomDomain = faker.random.arrayElement(businessDomains);
+  const randomUsername = faker.internet.userName();
+  return `${randomUsername}@${randomDomain}`;
+}
+
+const RippleKeypairs = require('ripple-keypairs');
+function generateCryptoAddress() {
+  let btcAddress = faker.finance.bitcoinAddress();
+  let ethAddress = faker.finance.ethereumAddress();
+  let rippleAddress = RippleKeypairs.deriveAddress(RippleKeypairs.generateSeed());
+  let morenoAddress = faker.finance.ethereumAddress();
+
+  return { btcAddress, ethAddress, rippleAddress, morenoAddress };
+}
+
+function randomFace(gender) {
+  let srcMale = "https://randomuser.me/api/portraits/men/";
+  let srcFemale = "https://randomuser.me/api/portraits/women/";
+
+  let randomNumberFrom1To100 = faker.random.number({ min: 1, max: 100 });
+  if(gender === 'male') {
+    return srcMale + randomNumberFrom1To100 + ".jpg";
+  } else {
+    return srcFemale + randomNumberFrom1To100 + ".jpg";
+  }
 }
