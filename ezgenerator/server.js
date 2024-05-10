@@ -19,7 +19,7 @@ app.prepare().then(() => {
   server.get('/api/random-user', async (req, res) => {
     try {
       let { gender, nat, ageRange } = req.query;
-      nat = "vi";
+      
       const apiUrl = `${randomUserApi}?gender=${gender || 'all'}&nat=${nat || 'us'}`;
 
       let data = {};
