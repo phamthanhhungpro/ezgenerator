@@ -20,6 +20,7 @@ const FakeMail: React.FC = () => {
         <div className='row mt-2'>
             <div className='col-md-6'>
                 <p>Simple Fake Email List Generator. Select how many email addresses you are looking for and click "generate".</p>
+                <p className='note-redirect'>If you want to use real mail for one-time mail confirmation features, please visit our <a href='https://www.mailrandom.com/'>Disposable Email</a> website immediately.</p>
                 <label className="form-label title-select-top">Number of Email to Generate</label>
                 <input type="text" value={numberEmail} className="form-control mb-2" onChange={changeNumberMail}></input>
                 <button type="submit" className="btn btn-primary" onClick={generateMail}>Generate Emails</button>

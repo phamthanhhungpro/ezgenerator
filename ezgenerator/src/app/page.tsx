@@ -158,6 +158,8 @@ export default function Home() {
   const [state, setState] = useState('');
   const [selectSideNavData, setSelectSideNavData] = useState('IG');
 
+  const [vnShow, setVNShow] = useState(false);
+
   const [imageSrc, setImageSrc] = useState('');
 
   const config = {
@@ -220,6 +222,11 @@ export default function Home() {
   }
 
   async function generateKey() {
+    if (country === 'vi') {
+      setVNShow(true);
+    } else {
+      setVNShow(false);
+    }
     const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}&nat=${country}&ageRange=${age}`, { method: 'GET' });
     const dataFetch = await res.json();
     setProfile(dataFetch);
@@ -327,6 +334,7 @@ export default function Home() {
                 <div className="col">
                   <label className="form-label title-select-top">Country</label>
                   <select value={country} onChange={changeCountry} className="form-select" aria-label="Random">
+                    <option value="vi">Viet Nam</option>
                     <option value="au">Australia</option>
                     <option value="br">Brazil</option>
                     <option value="ca">Canada</option>
@@ -417,8 +425,8 @@ export default function Home() {
       </div>
     </header><main>
         <div className="container-xxl mb-5">
-          <div className="row">
-            <div className="col-md-3" id="randomUserDisplaySection">
+          <div className="row" id="randomUserDisplaySection">
+            <div className="col-xs-12 col-md-3">
               <div className="card text-center shadow-lg">
                 <ul className="nav nav-pills flex-column mb-auto sidenav-left">
                   <li className="nav-item">
@@ -469,12 +477,12 @@ export default function Home() {
                 </ul>
               </div>
             </div>
-            <div className="col-md-9" id="randomUserDisplaySection">
+            <div className="col-xs-12 col-md-9">
               <div className="card shadow-lg">
                 {selectSideNavData === 'IG' && (
                   <><div className="card-header pt-5 shadow-sm text-center"><img src={profile?.results[0].picture.large} className="user-rounded-image img-fluid" id="displayUserPhoto"></img></div><div className="card-body mb-4 mt-5">
-                    <h3 className="card-title pt-2 fs-</div>2 text-center" ><span className="aclass" onClick={() => handleCopy(`${profile?.results[0].name.title} ${profile?.results[0].name.first} ${profile?.results[0].name.last}`)}>
-                              {profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}
+                    <h3 className="card-title pt-2 fs-</div>2 text-center" ><span className="aclass" onClick={() => handleCopy(`${!vnShow ? profile?.results[0].name.title : ''} ${profile?.results[0].name.first} ${profile?.results[0].name.last}`)}>
+                        {!vnShow ? profile?.results[0].name.title : ''} {profile?.results[0].name.first} {profile?.results[0].name.last}
                               <span className="iconCopyHiddenTitle"><FontAwesomeIcon icon={faCopy} /></span>
                             </span></h3>
                     <table className="table table-bordered mt-4">
@@ -482,8 +490,8 @@ export default function Home() {
                         <tr>
                           <td>
                             <span className="titleField"> Fake Name: </span>
-                            <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].name.title} ${profile?.results[0].name.first} ${profile?.results[0].name.last}`)}>
-                              {profile?.results[0].name.title} {profile?.results[0].name.first} {profile?.results[0].name.last}
+                            <span className="aclass" onClick={() => handleCopy(`${!vnShow ? profile?.results[0].name.title : ''} ${profile?.results[0].name.first} ${profile?.results[0].name.last}`)}>
+                            {!vnShow ? profile?.results[0].name.title : ''} {profile?.results[0].name.first} {profile?.results[0].name.last}
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
                             </span>
                           </td>
@@ -870,7 +878,7 @@ export default function Home() {
           </div>
         </div>
       </main><footer className="bg-dark py-5">
-        <p className="text-white text-center mb-0">Copyright @ 2022. All Right Reserved Developed by Nam Nguyen</p>
+        <p className="text-white text-center mb-0">Copyright @ 2024. All Right Reserved Developed by Nam Nguyen</p>
       </footer><div className="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="copiedToClipboardToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
           <div className="toast-header">

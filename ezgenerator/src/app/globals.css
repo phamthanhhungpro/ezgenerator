@@ -133,3 +133,10 @@ body {
   margin-left: 5px;
   display: none;
 }
+
+.note-redirect{
+  font-style: italic;
+  font-weight: 700;
+  font-size: small;
+  color: #ad681f;
+}

@@ -43,6 +43,7 @@ const FakePhoneNumber: React.FC = () => {
                 another country, and it is not necessary to dial the country code if the person you are trying to reach is in the same country. The
                 area code is the next group of numbers to dial, and it is for a more specific but large geographical region. Large cities usually have multiple area codes.
             </p>
+            <p className='note-redirect'>If you want to use a virtual phone number for personal SMS receiving purposes, go right to our <a href='https://simforrent.com/'>Simforrent Email</a> website to use all the features you expect.</p>
             <div className="row">
                 <div className="col-md-6">
                     <div className="card">
