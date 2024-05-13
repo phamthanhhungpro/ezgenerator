@@ -140,3 +140,10 @@ body {
   font-size: small;
   color: #ad681f;
 }
+
+.titleFeature{
+  font-style: italic;
+  font-weight: 700;
+  font-size: larger;
+  color: #ad681f;
+}

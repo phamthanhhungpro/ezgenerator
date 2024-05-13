@@ -1,6 +1,6 @@
 'use client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faCopy, faBitcoinSign, faCodeFork, faBank, faCreditCard, faCalendarDay, faCalendarDays, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { SetStateAction, useEffect, useState } from "react";
 import { format } from 'date-fns';
 import RandomText from './page/random-text';
@@ -12,128 +12,143 @@ import FakeCompany from "./page/fake-company";
 import FakePhoneNumber from "./page/fake-phone-number";
 import FakeSocialSecurityNumber from "./page/fake-social-security-number";
 import axios from "axios";
+import { faBitcoin, faEthereum, faMonero } from "@fortawesome/free-brands-svg-icons";
 
 export interface Profile {
   results: Result[]
   info: Info
   moreData: MoreData
-}
-
-export interface Info {
-  seed:    string;
-  results: number;
-  page:    number;
-  version: string;
-}
-
-export interface MoreData {
-  height:             number;
-  weight:             number;
-  bloodType:          string;
-  ethnicity:          string;
-  hairColor:          string;
-  bankName:           string;
-  bankNumber:         string;
-  routingNumber:      string;
-  iban:               string;
-  email:              string;
-  username:           string;
-  domainName:         string;
-  domainWord:         string;
-  urlWithQueryParams: string;
-  ipAddress:          string;
-  ipv6Address:        string;
-  macAddress:         string;
-  websiteUrl:         string;
-  userAgent:          string;
-  degree:             string;
-  school:             string;
-  companyName:        string;
-  companyDescription: string;
-  ein:                number;
-  jobTitle:           string;
-  salary:             number;
-  creditcard:         Creditcard[];
-}
-
-export interface Creditcard {
-  cardholderName: string;
-  cardType:       string;
-  cardNumber:     string[];
-  cvv:            string;
-  expirationDate: string;
+  cryptoAddress: CryptoAddress
 }
 
 export interface Result {
-  gender:     string;
-  name:       Name;
-  location:   Location;
-  email:      string;
-  login:      Login;
-  dob:        Dob;
-  registered: Dob;
-  phone:      string;
-  cell:       string;
-  id:         ID;
-  picture:    Picture;
-  nat:        string;
-}
-
-export interface Dob {
-  date: Date;
-  age:  number;
-}
-
-export interface ID {
-  name:  string;
-  value: string;
-}
-
-export interface Location {
-  street:      Street;
-  city:        string;
-  state:       string;
-  country:     string;
-  postcode:    number;
-  coordinates: Coordinates;
-  timezone:    Timezone;
-}
-
-export interface Coordinates {
-  latitude:  string;
-  longitude: string;
-}
-
-export interface Street {
-  number: number;
-  name:   string;
-}
-
-export interface Timezone {
-  offset:      string;
-  description: string;
-}
-
-export interface Login {
-  uuid:     string;
-  username: string;
-  password: string;
-  salt:     string;
-  md5:      string;
-  sha1:     string;
-  sha256:   string;
+  gender: string
+  name: Name
+  location: Location
+  email: string
+  login: Login
+  dob: Dob
+  registered: Registered
+  phone: string
+  cell: string
+  id: Id
+  picture: Picture
+  nat: string
 }
 
 export interface Name {
-  title: string;
-  first: string;
-  last:  string;
+  title: string
+  first: string
+  last: string
+}
+
+export interface Location {
+  street: Street
+  city: string
+  state: string
+  country: string
+  postcode: number
+  coordinates: Coordinates
+  timezone: Timezone
+}
+
+export interface Street {
+  number: number
+  name: string
+}
+
+export interface Coordinates {
+  latitude: string
+  longitude: string
+}
+
+export interface Timezone {
+  offset: string
+  description: string
+}
+
+export interface Login {
+  uuid: string
+  username: string
+  password: string
+  salt: string
+  md5: string
+  sha1: string
+  sha256: string
+}
+
+export interface Dob {
+  date: string
+  age: number
+}
+
+export interface Registered {
+  date: string
+  age: number
+}
+
+export interface Id {
+  name: string
+  value: string
 }
 
 export interface Picture {
-  large:     string;
-  medium:    string;
-  thumbnail: string;
+  large: string
+  medium: string
+  thumbnail: string
+}
+
+export interface Info {
+  seed: string
+  results: number
+  page: number
+  version: string
+}
+
+export interface MoreData {
+  height: number
+  weight: number
+  bloodType: string
+  ethnicity: string
+  hairColor: string
+  bankName: string
+  bankNumber: string
+  routingNumber: string
+  iban: string
+  email: string
+  username: string
+  domainName: string
+  domainWord: string
+  urlWithQueryParams: string
+  ipAddress: string
+  ipv6Address: string
+  macAddress: string
+  websiteUrl: string
+  userAgent: string
+  degree: string
+  school: string
+  companyName: string
+  companyDescription: string
+  ein: number
+  jobTitle: string
+  salary: number
+  salaryPerHour: number
+  creditcard: Creditcard[]
+}
+
+export interface Creditcard {
+  cardholderName: string
+  cardType: string
+  cardNumber: string[]
+  cvv: string
+  expirationDate: string
+}
+
+export interface CryptoAddress {
+  btcAddress: string
+  ethAddress: string
+  rippleAddress: string
+  morenoAddress: string
 }
 
 
@@ -514,7 +529,7 @@ export default function Home() {
                         </tr>
                         <tr>
                           <td>
-                            <span className="titleField"> Phone: </span>
+                            <span className="titleField"><FontAwesomeIcon icon={faPhone} /> Phone: </span>
                             <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].phone}`)}>
                               {profile?.results[0].phone}
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
@@ -539,7 +554,7 @@ export default function Home() {
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
                           <td>
-                            <span className="titleField"> Date of Birth: </span>
+                            <span className="titleField"><FontAwesomeIcon icon={faCalendarDays} /> Date of Birth: </span>
                             <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].dob.date ? format(profile?.results[0].dob.date, "MM-dd-yyyy") : ''}`)}>
                               {profile?.results[0].dob.date ? format(profile?.results[0].dob.date, "MM-dd-yyyy") : ''}
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
@@ -602,19 +617,19 @@ export default function Home() {
                         </tr>
                       </tbody>
                     </table>
-                    <h3>Financial & Banking Numbers</h3>
+                    <h3 className="titleFeature">Financial & Banking Numbers</h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
                           <td>
-                            <span className="titleField"> Credit Card Number:</span>
+                            <span className="titleField"><FontAwesomeIcon icon={faCreditCard} /> Credit Card Number:</span>
                               <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.creditcard[0].cardNumber}`)}>
                                 {profile?.moreData.creditcard[0].cardNumber}
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
                             </span>
                           </td>
                           <td>
-                            <span className="titleField"> Bank: </span>
+                            <span className="titleField"><FontAwesomeIcon icon={faBank} /> Bank: </span>
                             <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.bankName}`)}>
                               {profile?.moreData.bankName}
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
@@ -671,7 +686,44 @@ export default function Home() {
                         </tr>
                       </tbody>
                     </table>
-                    <h3>Internet Details</h3>
+                    <h3 className="titleFeature">Cryptocurrency Addresses</h3>
+                    <table className="table table-bordered mt-4">
+                      <tbody className="text-start" id="displayUserInfo">
+                        <tr>
+                          <td>
+                            <span className="titleField"><FontAwesomeIcon icon={faBitcoin} /> Bitcoin Address:</span>
+                              <span className="aclass" onClick={() => handleCopy(`${profile?.cryptoAddress.btcAddress}`)}>
+                                {profile?.cryptoAddress.btcAddress}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"><FontAwesomeIcon icon={faEthereum} /> Ethereum Address: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.cryptoAddress.ethAddress}`)}>
+                              {profile?.cryptoAddress.ethAddress}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span className="titleField"><FontAwesomeIcon icon={faCodeFork} /> Ripple Address:</span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.cryptoAddress.rippleAddress}`)}>
+                              {profile?.cryptoAddress.rippleAddress}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span className="titleField"><FontAwesomeIcon icon={faMonero} /> Monero Address: </span>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.cryptoAddress.morenoAddress}`)}>
+                              {profile?.cryptoAddress.morenoAddress}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <h3 className="titleFeature">Internet Details</h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
@@ -765,7 +817,7 @@ export default function Home() {
                         </tr>
                       </tbody>
                     </table>
-                    <h3>Education</h3>
+                    <h3 className="titleFeature">Education</h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
@@ -786,7 +838,7 @@ export default function Home() {
                         </tr>
                       </tbody>
                     </table>
-                    <h3>Fake Company & Employee</h3>
+                    <h3 className="titleFeature">Fake Company & Employee</h3>
                     <table className="table table-bordered mt-4">
                       <tbody className="text-start" id="displayUserInfo">
                         <tr>
@@ -799,8 +851,14 @@ export default function Home() {
                           </td>
                           <td>
                             <span className="titleField"> Salary: </span>
+                            <br></br>
                             <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.salary}`)}>
-                              {profile?.moreData.salary}
+                              $ {profile?.moreData.salary} per year
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                            <br></br>
+                            <span className="aclass" onClick={() => handleCopy(`${profile?.moreData.salaryPerHour}`)}>
+                              $ {profile?.moreData.salaryPerHour} per hour
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
                             </span>
                           </td>
