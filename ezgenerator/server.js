@@ -20,7 +20,7 @@ app.prepare().then(() => {
     try {
       let { gender, nat, ageRange } = req.query;
       
-      const apiUrl = `${randomUserApi}?gender=${gender || 'all'}&nat=${nat || 'us'}`;
+      const apiUrl = `${randomUserApi}?gender=${gender || 'all'}&nat=${nat || 'en'}`;
 
       let data = {};
       if(nat === 'vi') {
@@ -29,8 +29,9 @@ app.prepare().then(() => {
       else {
         const response = await axios.get(apiUrl);
         data = response.data;
-        data.results[0].email = faker.internet.email();
       }
+
+      data.results[0].email = generateBussinessEmail();
 
       var additionalData = getAdditionalInfo(nat);
       data.moreData = additionalData;
@@ -458,20 +459,66 @@ function getRandomDateOfBirth(range) {
 
 function getUserInfoByNat(gender, nat) {
   // Set Faker.js locale based on nationality
-  faker.locale = nat.toLowerCase();
+  faker.locale = 'vi';
 
+  const vietnameseSurnames = [
+    "Nguyễn", "Trần", "Lê", "Phạm", "Huỳnh", "Hoàng", "Phan", 
+    "Vũ", "Võ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", 
+    "Lý", "Đinh", "Trịnh", "Mai", "Đoàn", "Lâm", "Trương", 
+    "Vương", "Quách", "Tạ", "Thái", "Châu", "Văn", "Tô", 
+    "Lưu", "Thân", "Tôn", "Triệu", "Vĩ", "Quang", "Nguyễn Văn", 
+    "Nguyễn Thị", "Phùng", "Phương", "Lương", "Cao", "Phùng", 
+    "Đinh", "Bạch", "Hứa", "Đoàn", "Tôn Nữ", "Thiệu", "Từ"
+  ];
+
+  const vietnameseMaleMiddleNames = [
+    "Văn", "Bảo", "Bình", "Công", "Cường", "Đức", "Duy", 
+    "Hải", "Hiếu", "Hoàng", "Hùng", "Huy", "Khoa", "Khôi", 
+    "Long", "Minh", "Nam", "Nhân", "Phúc", "Quang", 
+    "Quốc", "Sơn", "Tấn", "Thanh", "Thành", "Thiện", 
+    "Trung", "Tuấn", "Tùng", "Việt", "Vinh"
+  ];
+  
+  const vietnameseFemaleMiddleNames = [
+    "Thị", "Bảo", "Chi", "Diệp", "Hà", "Hằng", "Hiền", 
+    "Hoa", "Hồng", "Huệ", "Hương", "Khanh", "Lan", "Linh", 
+    "Mai", "Minh", "Ngọc", "Như", "Oanh", "Phương", 
+    "Quỳnh", "Thanh", "Thảo", "Thúy", "Thùy", "Trang", 
+    "Trinh", "Tuyết", "Vân", "Xuân", "Yến"
+  ];
+
+  const vietnameseMaleFirstNames = [
+    "Anh", "Bảo", "Cường", "Dũng", "Duy", "Đạt", "Đức", 
+    "Giang", "Hà", "Hải", "Hiếu", "Hoàng", "Hùng", "Huy", 
+    "Khánh", "Khoa", "Long", "Minh", "Nam", "Nhân", 
+    "Phong", "Phúc", "Quân", "Quang", "Sơn", "Thanh", "Thành", 
+    "Thiện", "Tiến", "Trung", "Tuấn", "Tùng", "Vinh", "Vũ"
+  ];
+  
+  const vietnameseFemaleFirstNames = [
+    "Anh", "Bích", "Châu", "Chi", "Diệp", "Dung", "Giang", 
+    "Hà", "Hạnh", "Hiền", "Hoa", "Hoài", "Hương", "Huyền", 
+    "Khánh", "Lan", "Linh", "Loan", "Mai", "Minh", 
+    "Ngọc", "Như", "Nhung", "Oanh", "Phương", "Quyên", 
+    "Thảo", "Thùy", "Trang", "Trinh", "Tuyết", "Vân", "Xuân"
+  ];
+  let fullName = "";
+  if(gender === 'male') {
+    fullName = getFullName(vietnameseSurnames, vietnameseMaleMiddleNames, vietnameseMaleFirstNames);
+  } else {
+    fullName = getFullName(vietnameseSurnames, vietnameseFemaleMiddleNames, vietnameseFemaleFirstNames);
+  }
   // Generate a random user object using Faker.js
   const user = faker.helpers.userCard();
-  console.log(user);
-
   // Filter the generated user based on gender and nationality
   const filteredUser = {
     gender: gender,
     nat: nat,
     name: {
       title: gender === 'male' ? 'Mr' : 'Ms',
-      first: user.name.split(' ')[0],
-      last: user.name.split(' ')[1] + " " + user.name.split(' ')[2],
+      first: fullName.split(' ')[0],
+      last: fullName.split(' ')[1] + " " + fullName.split(' ')[2],
+      fullName: fullName,
     },
     location: {
       street: {
@@ -495,7 +542,7 @@ function getUserInfoByNat(gender, nat) {
     login: {
       // uuid: user.login.uuid,
       // username: user.login.username,
-      // password: user.login.password,
+      password: faker.internet.password(),
       // salt: user.login.salt,
       // md5: user.login.md5,
       // sha1: user.login.sha1,
@@ -509,7 +556,7 @@ function getUserInfoByNat(gender, nat) {
       // date: user.registered.date,
       // age: user.registered.age
     },
-    phone: user.phone,
+    phone: generateVietnamesePhoneNumber(),
     cell: user.cell,
     id: {
       // name: user.id.name,
@@ -528,6 +575,11 @@ function getUserInfoByNat(gender, nat) {
 }
 
 function generateBussinessEmail() {
+  faker.locale = 'en';
+
+  // Generate a random user object using Faker.js
+  const user = faker.helpers.userCard();
+  
   const businessDomains = [
     'acme.com',
     'widgetcorp.com',
@@ -551,7 +603,7 @@ function generateBussinessEmail() {
     'peakperformancesolutions.org'
   ];
   const randomDomain = faker.random.arrayElement(businessDomains);
-  const randomUsername = faker.internet.userName();
+  const randomUsername = user.email.split('@')[0];
   return `${randomUsername}@${randomDomain}`;
 }
 
@@ -575,4 +627,29 @@ function randomFace(gender) {
   } else {
     return srcFemale + randomNumberFrom1To100 + ".jpg";
   }
+}
+
+function getFullName(surNames, middleNames, firstNames) {
+  return faker.random.arrayElement(surNames) + " " + faker.random.arrayElement(middleNames) + " " + faker.random.arrayElement(firstNames);
+}
+
+function generateVietnamesePhoneNumber() {
+  var networks = ["viettel", "vinaphone", "mobifone"];
+  var networkCodes = {
+      "viettel": ["032", "033", "034", "035", "036", "037", "038", "039"],
+      "vinaphone": ["088", "091", "094", "083", "084", "085", "081", "082"],
+      "mobifone": ["070", "079", "077", "076", "078"]
+  };
+  
+  var networkCode = networkCodes[faker.random.arrayElement(networks)];
+  if (!networkCode) {
+      console.error("Invalid network specified. Please choose Viettel, Vinaphone, or Mobifone.");
+      return;
+  }
+
+  var phoneNumber = "(+84) " + networkCode[Math.floor(Math.random() * networkCode.length)];
+  for (var i = 0; i < 7; i++) {
+      phoneNumber += Math.floor(Math.random() * 10);
+  }
+  return phoneNumber;
 }
