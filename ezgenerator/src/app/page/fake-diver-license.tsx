@@ -22,7 +22,7 @@ const FakeDriverLicense: React.FC = () => {
     }
 
     async function generateDriverLicense() {
-        const res = await fetch(`http://localhost:3000/api/driver-license`, {method: 'GET'});
+        const res = await fetch(`https://randominfor.com/api/driver-license`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataDriver(dataFetch.data);
     }
