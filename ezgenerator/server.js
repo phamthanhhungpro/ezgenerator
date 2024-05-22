@@ -510,6 +510,7 @@ function getUserInfoByNat(gender, nat) {
   }
   // Generate a random user object using Faker.js
   const user = faker.helpers.userCard();
+  var addressVN = generateRandomVietnamAddress();
   // Filter the generated user based on gender and nationality
   const filteredUser = {
     gender: gender,
@@ -520,12 +521,13 @@ function getUserInfoByNat(gender, nat) {
       last: fullName.split(' ')[1] + " " + fullName.split(' ')[2],
       fullName: fullName,
     },
+    addressVN,
     location: {
       street: {
         number: user.address.geo.lng,
         name: user.address.street.name
       },
-      city: user.address.city,
+      city: addressVN.city,
       state: user.address.state,
       country: user.address.country,
       postcode: user.address.zipcode,
@@ -652,4 +654,82 @@ function generateVietnamesePhoneNumber() {
       phoneNumber += Math.floor(Math.random() * 10);
   }
   return phoneNumber;
+}
+
+// Enhanced data structure for cities, provinces, districts, and wards in Vietnam
+const vietnamData = {
+  'Hanoi': {
+      'districts': {
+          'Ba Dinh': ['Phuc Xa', 'Truc Bach', 'Vinh Phuc', 'Cong Vi', 'Lieu Giai'],
+          'Hoan Kiem': ['Phan Chu Trinh', 'Hang Bai', 'Cua Dong', 'Dong Xuan', 'Hang Ma'],
+          'Tay Ho': ['Quang An', 'Xuan La', 'Nhat Tan', 'Tu Lien', 'Phu Thuong'],
+          'Long Bien': ['Gia Thuy', 'Ngoc Thuy', 'Bo De', 'Viet Hung', 'Phuc Loi'],
+          'Cau Giay': ['Dich Vong', 'Nghia Tan', 'Mai Dich', 'Yen Hoa', 'Trung Hoa'],
+          // Add more districts and wards as needed
+      }
+  },
+  'Ho Chi Minh City': {
+      'districts': {
+          'District 1': ['Ben Nghe', 'Ben Thanh', 'Nguyen Thai Binh', 'Da Kao', 'Pham Ngu Lao'],
+          'District 2': ['An Khanh', 'An Loi Dong', 'An Phu', 'Binh An', 'Binh Khanh'],
+          'District 3': ['Ward 1', 'Ward 2', 'Ward 3', 'Ward 4', 'Ward 5'],
+          'District 4': ['Ward 6', 'Ward 8', 'Ward 9', 'Ward 10', 'Ward 13'],
+          'District 5': ['Ward 1', 'Ward 2', 'Ward 3', 'Ward 4', 'Ward 6'],
+          // Add more districts and wards as needed
+      }
+  },
+  'Da Nang': {
+      'districts': {
+          'Hai Chau': ['Thuan Phuoc', 'Thanh Binh', 'Hai Chau 1', 'Hai Chau 2', 'Phuoc Ninh'],
+          'Thanh Khe': ['Tan Chinh', 'Chinh Gian', 'Thac Gian', 'Vinh Trung', 'Thanh Khe Dong'],
+          'Son Tra': ['An Hai Bac', 'An Hai Tay', 'An Hai Dong', 'Man Thai', 'Tho Quang'],
+          'Ngu Hanh Son': ['My An', 'My Hoa', 'My Khe', 'Hoa Quy', 'Hoa Hai'],
+          'Lien Chieu': ['Hoa Khanh Bac', 'Hoa Khanh Nam', 'Hoa Minh', 'Hoa Hiep Bac', 'Hoa Hiep Nam'],
+          // Add more districts and wards as needed
+      }
+  },
+  'Hai Phong': {
+      'districts': {
+          'Hong Bang': ['Hoang Van Thu', 'Phan Boi Chau', 'Quang Trung', 'Ho Nam', 'Truong Son'],
+          'Le Chan': ['An Bien', 'An Duong', 'Cat Dai', 'Dang Giang', 'Dong Hai'],
+          'Ngo Quyen': ['Cau Dat', 'Dong Khe', 'Lach Tray', 'Le Loi', 'May Chai'],
+          'Kien An': ['Bac Son', 'Dang Lam', 'Dinh Tien Hoang', 'Dong Hoa', 'Nam Son'],
+          'Hai An': ['Dang Hai', 'Dang Lam', 'Dong Hai 1', 'Dong Hai 2', 'Thanh To'],
+          // Add more districts and wards as needed
+      }
+  },
+  'Can Tho': {
+      'districts': {
+          'Ninh Kieu': ['Tan An', 'An Cu', 'An Hoa', 'An Khanh', 'An Lac'],
+          'Binh Thuy': ['An Thoi', 'Binh Thuy', 'Long Hoa', 'Long Tuyen', 'Thoi An Dong'],
+          'Cai Rang': ['Ba Lang', 'Hung Phu', 'Le Binh', 'Phu Thu', 'Thuan Hung'],
+          'O Mon': ['Chau Van Liem', 'Long Hung', 'Long Hoa', 'Thoi Hoa', 'Thoi Long'],
+          'Thot Not': ['Tan Loc', 'Tan Hung', 'Thoi Thuan', 'Thuan An', 'Thoi Long'],
+          // Add more districts and wards as needed
+      }
+  }
+};
+
+// Function to get a random element from an array
+function getRandomElement(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+// Function to generate a random Vietnamese address
+function generateRandomVietnamAddress() {
+  const city = getRandomElement(Object.keys(vietnamData));
+  const districts = vietnamData[city].districts;
+  const district = getRandomElement(Object.keys(districts));
+  const ward = getRandomElement(districts[district]);
+
+  const address = {
+      street: faker.address.streetName(),
+      ward: ward,
+      district: district,
+      city: city,
+      country: 'Vietnam',
+      zipCode: faker.address.zipCode('#####') // Generate a 5-digit zip code
+  };
+
+  return address;
 }

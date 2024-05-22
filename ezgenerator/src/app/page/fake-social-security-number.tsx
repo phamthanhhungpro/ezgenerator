@@ -18,7 +18,7 @@ const FakeSocialSecurityNumber: React.FC = () => {
     }
 
     async function generateSSN() {
-        const res = await fetch(`https://randominfor.com//api/ssn/?state=${state}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000//api/ssn/?state=${state}`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataSSN(dataFetch.data);
     }

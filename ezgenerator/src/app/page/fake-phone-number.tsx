@@ -25,7 +25,7 @@ const FakePhoneNumber: React.FC = () => {
     }
 
     async function generatePhoneNumbers() {
-        const res = await fetch(`https://randominfor.com/api/phone/?countryCode=${countryCode}&nums=${numsPhoneNumber}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000/api/phone/?countryCode=${countryCode}&nums=${numsPhoneNumber}`, {method: 'GET'});
         const dataFetch = await res.json();
         const data: string[] = dataFetch.data;
         setListPhoneNumbers(data.join('\n'));
