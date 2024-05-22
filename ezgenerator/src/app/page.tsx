@@ -22,6 +22,7 @@ export interface Profile {
 }
 
 export interface Result {
+  addressVN: addressVN
   gender: string
   name: Name
   location: Location
@@ -36,6 +37,14 @@ export interface Result {
   nat: string
 }
 
+export interface addressVN {
+  city: string
+  country: string
+  district: string
+  street: string
+  ward: string
+  zipCode: string
+}
 export interface Name {
   title: string
   first: string
@@ -546,6 +555,23 @@ export default function Home() {
                               {profile?.results[0].id.value}
                               <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
                             </span>
+                          </td>
+                          <td>
+                            <span className="titleField"> Address:</span>
+                            {vnShow && (
+                              <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].addressVN?.street}, ${profile?.results[0].addressVN?.ward}, ${profile?.results[0].addressVN?.district}, ${profile?.results[0].addressVN?.city}, ${profile?.results[0].addressVN?.country}`)}>
+                                {profile?.results[0].addressVN?.street}, {profile?.results[0].addressVN?.ward}, {profile?.results[0].addressVN?.district}, {profile?.results[0].addressVN?.city}, {profile?.results[0].addressVN?.country}
+                                <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                              </span>
+                            
+                            )}
+                            {!vnShow && (
+                              <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].location.street.number} ${profile?.results[0].location.street.name}, ${profile?.results[0].location.city}, ${profile?.results[0].location.state}, ${profile?.results[0].location.country}`)}>
+                            {profile?.results[0].location.street.number} {profile?.results[0].location.street.name}, {profile?.results[0].location.city}, {profile?.results[0].location.state}, {profile?.results[0].location.country}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                            )}
+                            
                           </td>
                         </tr>
                       </tbody>
