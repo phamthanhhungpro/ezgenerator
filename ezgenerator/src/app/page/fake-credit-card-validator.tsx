@@ -14,7 +14,7 @@ const FakeCreditCardValidator: React.FC = () => {
     }
 
     async function validateCard() {
-        const res = await fetch(`http://localhost:3000/api/validate-card/?cardNumber=${card.replaceAll(' ', '')}`, {method: 'GET'});
+        const res = await fetch(`https://randominfor.com/api/validate-card/?cardNumber=${card.replaceAll(' ', '')}`, {method: 'GET'});
         const dataFetch = await res.json();
         setValidateResult(dataFetch);
     }

@@ -670,11 +670,11 @@ const vietnamData = {
   },
   'Ho Chi Minh City': {
       'districts': {
-          'District 1': ['Ben Nghe', 'Ben Thanh', 'Nguyen Thai Binh', 'Da Kao', 'Pham Ngu Lao'],
-          'District 2': ['An Khanh', 'An Loi Dong', 'An Phu', 'Binh An', 'Binh Khanh'],
-          'District 3': ['Ward 1', 'Ward 2', 'Ward 3', 'Ward 4', 'Ward 5'],
-          'District 4': ['Ward 6', 'Ward 8', 'Ward 9', 'Ward 10', 'Ward 13'],
-          'District 5': ['Ward 1', 'Ward 2', 'Ward 3', 'Ward 4', 'Ward 6'],
+          'Quan 1': ['Ben Nghe', 'Ben Thanh', 'Nguyen Thai Binh', 'Da Kao', 'Pham Ngu Lao'],
+          'Quan 2': ['An Khanh', 'An Loi Dong', 'An Phu', 'Binh An', 'Binh Khanh'],
+          'Quan 3': ['Phường 1', 'Phường 2', 'Phường 3', 'Phường 4', 'Phường 5'],
+          'Quan 4': ['Phường 6', 'Phường 8', 'Phường 9', 'Phường 10', 'Phường 13'],
+          'Quan 5': ['Phường 1', 'Phường 2', 'Phường 3', 'Phường 4', 'Phường 6'],
           // Add more districts and wards as needed
       }
   },

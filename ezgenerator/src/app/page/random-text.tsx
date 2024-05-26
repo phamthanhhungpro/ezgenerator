@@ -16,7 +16,7 @@ const RandomText: React.FC = () => {
   }
 
   async function generateRandomText() {
-    const res = await fetch(`http://localhost:3000/api/text/?locale=${selectRTCountry}&numParagraphs=${numOfParagraphs}`, {method: 'GET'});
+    const res = await fetch(`https://randominfor.com/api/text/?locale=${selectRTCountry}&numParagraphs=${numOfParagraphs}`, {method: 'GET'});
     const dataFetch = await res.json();
     setDataText(dataFetch.text);
     setDataHtml(dataFetch.htmlTxt);
