@@ -666,7 +666,8 @@ const vietnamData = {
           'Long Bien': ['Gia Thuy', 'Ngoc Thuy', 'Bo De', 'Viet Hung', 'Phuc Loi'],
           'Cau Giay': ['Dich Vong', 'Nghia Tan', 'Mai Dich', 'Yen Hoa', 'Trung Hoa'],
           // Add more districts and wards as needed
-      }
+      },
+      'zipCode': '100000'
   },
   'Ho Chi Minh City': {
       'districts': {
@@ -676,7 +677,8 @@ const vietnamData = {
           'Quan 4': ['Phường 6', 'Phường 8', 'Phường 9', 'Phường 10', 'Phường 13'],
           'Quan 5': ['Phường 1', 'Phường 2', 'Phường 3', 'Phường 4', 'Phường 6'],
           // Add more districts and wards as needed
-      }
+      },
+      'zipCode': '700000'
   },
   'Da Nang': {
       'districts': {
@@ -686,7 +688,8 @@ const vietnamData = {
           'Ngu Hanh Son': ['My An', 'My Hoa', 'My Khe', 'Hoa Quy', 'Hoa Hai'],
           'Lien Chieu': ['Hoa Khanh Bac', 'Hoa Khanh Nam', 'Hoa Minh', 'Hoa Hiep Bac', 'Hoa Hiep Nam'],
           // Add more districts and wards as needed
-      }
+      },
+      'zipCode': '550000'
   },
   'Hai Phong': {
       'districts': {
@@ -696,7 +699,8 @@ const vietnamData = {
           'Kien An': ['Bac Son', 'Dang Lam', 'Dinh Tien Hoang', 'Dong Hoa', 'Nam Son'],
           'Hai An': ['Dang Hai', 'Dang Lam', 'Dong Hai 1', 'Dong Hai 2', 'Thanh To'],
           // Add more districts and wards as needed
-      }
+      },
+      'zipCode': '180000'
   },
   'Can Tho': {
       'districts': {
@@ -706,7 +710,8 @@ const vietnamData = {
           'O Mon': ['Chau Van Liem', 'Long Hung', 'Long Hoa', 'Thoi Hoa', 'Thoi Long'],
           'Thot Not': ['Tan Loc', 'Tan Hung', 'Thoi Thuan', 'Thuan An', 'Thoi Long'],
           // Add more districts and wards as needed
-      }
+      },
+      'zipCode': '900000'
   }
 };
 
@@ -728,7 +733,7 @@ function generateRandomVietnamAddress() {
       district: district,
       city: city,
       country: 'Vietnam',
-      zipCode: faker.address.zipCode('#####') // Generate a 5-digit zip code
+      zipCode: vietnamData[city].zipCode
   };
 
   return address;
