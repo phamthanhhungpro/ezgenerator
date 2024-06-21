@@ -545,7 +545,20 @@ export default function Home() {
                             </span>
                           </td>
                           <td>
-                            <span className="titleField"> QR Code:</span>
+                            <span className="titleField"> Zip Code:</span>
+                            {!vnShow && (
+                              <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].location.postcode}`)}>
+                                {profile?.results[0].location.postcode}
+                                <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                              </span>
+                            
+                            )}
+                            {vnShow && (
+                              <span className="aclass" onClick={() => handleCopy(`${profile?.results[0].addressVN?.zipCode}`)}>
+                            {profile?.results[0].addressVN?.zipCode}
+                              <span className="iconCopyHidden"><FontAwesomeIcon icon={faCopy} /></span>
+                            </span>
+                            )}
                           </td>
                         </tr>
                         <tr>
