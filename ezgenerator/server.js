@@ -26,7 +26,7 @@ const pool = new Pool({
 // Function to log request details to PostgreSQL, including a JSON data column
 async function logRequest(ip, action, jsonData) {
   const query = `
-    INSERT INTO request_logs (ip_address, action, request_time, log_data)
+    INSERT INTO InfoLog (Ip, Action, Time, Data)
     VALUES ($1, $2, NOW(), $3)
   `;
   try {
@@ -195,7 +195,7 @@ app.prepare().then(() => {
       var data = generateFakeSSN(state);
 
       await logRequest(ip, action, JSON.stringify(data));
-      
+
       res.json({ data });
     } catch (error) {
       res.status(500).send('Error generating');
