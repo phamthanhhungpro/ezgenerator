@@ -201,7 +201,7 @@ export default function Home() {
 
   async function downloadImage(imageUrl: string) {
     try {
-      const response = await axios.get('http://localhost:3000/api/download', {
+      const response = await axios.get('http://geninfo.net/api/download', {
           params: {
               imageUrl: imageUrl,
               imageName: 'downloaded_image.jpg'
@@ -251,7 +251,7 @@ export default function Home() {
     } else {
       setVNShow(false);
     }
-    const res = await fetch(`http://localhost:3000/api/random-user/?gender=${gender}&nat=${country}&ageRange=${age}`, { method: 'GET' });
+    const res = await fetch(`http://geninfo.net/api/random-user/?gender=${gender}&nat=${country}&ageRange=${age}`, { method: 'GET' });
     const dataFetch = await res.json();
     setProfile(dataFetch);
   }
