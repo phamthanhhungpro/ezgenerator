@@ -5,7 +5,7 @@ const FakeMail: React.FC = () => {
     const [listEmail, setListEmail] = useState('');
 
     async function generateMail() {
-        const res = await fetch(`https://randominfor.com/api/emails/?nums=${numberEmail}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000/api/emails/?nums=${numberEmail}`, {method: 'GET'});
         const dataFetch = await res.json();
         setListEmail(dataFetch.emails.join("\n"));
     }

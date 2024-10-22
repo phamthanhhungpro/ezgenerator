@@ -26,7 +26,7 @@ const FakeCompany: React.FC = () => {
     }
 
     async function generateCompany() {
-        const res = await fetch(`https://randominfor.com/api/company?locale=${country}&nums=${numsCompany}`, {method: 'GET'});
+        const res = await fetch(`http://localhost:3000/api/company?locale=${country}&nums=${numsCompany}`, {method: 'GET'});
         const dataFetch = await res.json();
         setDataCompany(dataFetch.data);
     }
